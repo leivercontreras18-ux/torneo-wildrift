@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración | Arena Wild Rift</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <title>Arena Wild Rift | Torneo Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         :root {
             --bg-dark: #05080f;
-            --panel-bg: rgba(13, 20, 33, 0.85);
+            --panel-bg: rgba(13, 20, 33, 0.75);
+            --panel-border: rgba(0, 229, 255, 0.2);
             --cyan: #00e5ff;
             --magenta: #ff007f;
+            --gold: #ffc107;
             --green: #00e676;
-            --yellow: #ffab00;
             --text-main: #e2e8f0;
         }
 
@@ -22,159 +24,267 @@
         body {
             background-color: var(--bg-dark); color: var(--text-main);
             font-family: 'Rajdhani', sans-serif;
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; overflow-x: hidden;
-            background-image: url('fondo-torneo.jpg');
+            min-height: 100vh; position: relative; overflow-x: hidden;
+            background-image: linear-gradient(rgba(5, 8, 15, 0.7), rgba(5, 8, 15, 0.9)), url('fondo-torneo.jpg');
             background-size: cover; background-position: center; background-attachment: fixed;
         }
 
-        .bg-overlay { position: fixed; inset: 0; z-index: 0; background: radial-gradient(circle at center, rgba(5, 8, 15, 0.6) 0%, rgba(5, 8, 15, 0.95) 100%); pointer-events: none; }
-        .hex-pattern { position: fixed; inset: 0; z-index: 0; opacity: 0.1; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3C/svg%3E"); }
-
-        .btn-back {
-            position: absolute; top: 20px; left: 20px; z-index: 10;
-            background: rgba(255,255,255,0.05); color: #fff; text-decoration: none;
-            padding: 8px 20px; border-radius: 5px; font-weight: 600; font-size: 0.9rem;
-            border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; backdrop-filter: blur(5px);
-        }
-        .btn-back:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); color: var(--cyan); }
-
-        /* --- LOGIN --- */
-        .login-container {
-            position: relative; z-index: 2;
-            background: var(--panel-bg); backdrop-filter: blur(15px);
-            padding: 40px; border-radius: 10px;
-            border: 1px solid var(--cyan); box-shadow: 0 0 30px rgba(0,229,255,0.2);
-            width: 100%; max-width: 400px; text-align: center;
-        }
-        .login-container h1 { font-family: 'Orbitron', sans-serif; color: var(--cyan); margin-top: 0; margin-bottom: 20px;}
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; margin-bottom: 5px; font-weight: 700; }
-        .input-group input {
-            width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #30363d;
-            background-color: rgba(0,0,0,0.5); color: #fff; box-sizing: border-box; font-family: 'Rajdhani', sans-serif;
-        }
-        .input-group input:focus { outline: none; border-color: var(--magenta); }
-        
-        .btn-esports {
-            position: relative; display: inline-flex; align-items: center; justify-content: center;
-            padding: 12px; width: 100%; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700;
-            letter-spacing: 2px; text-transform: uppercase; text-decoration: none; cursor: pointer;
-            border: none; transition: all 0.25s ease; color: #fff;
-            background: linear-gradient(90deg, var(--cyan), var(--magenta));
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
-            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
-        }
-        .btn-esports:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0, 229, 255, 0.6); }
-
-        /* --- DASHBOARD --- */
-        #dashboard { display: none; width: 100%; max-width: 1200px; padding: 20px; z-index: 2; position: relative;}
-        
-        .header-panel {
+        /* --- BARRA DE NAVEGACIÓN --- */
+        nav {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--panel-bg); backdrop-filter: blur(10px);
-            padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;
+            background-color: rgba(5, 8, 15, 0.9); backdrop-filter: blur(10px);
+            padding: 15px 40px; position: sticky; top: 0; z-index: 100;
+            border-top: 3px solid transparent;
+            border-image: linear-gradient(90deg, var(--cyan), var(--magenta)) 1;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .header-panel h1 { font-family: 'Orbitron', sans-serif; margin: 0; color: var(--cyan); }
-        .btn-logout { background: #da3633; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s;}
-        .btn-logout:hover { background: #f85149; }
         
-        .panel-box { background: var(--panel-bg); backdrop-filter: blur(10px); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
-        .panel-box h2 { font-family: 'Orbitron', sans-serif; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; color: var(--cyan); margin-bottom: 20px;}
+        nav::before, nav::after { content: ''; position: absolute; top: 0; width: 0; height: 0; border-style: solid; }
+        nav::before { left: 0; border-width: 30px 30px 0 0; border-color: var(--cyan) transparent transparent transparent; }
+        nav::after { right: 0; border-width: 0 30px 30px 0; border-color: transparent var(--magenta) transparent transparent; }
+
+        .logo { display: flex; align-items: center; gap: 10px; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.1rem; color: #fff; text-decoration: none; z-index: 2;}
+        .logo img { height: 35px; }
         
-        /* Configuración */
-        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;}
-        .settings-group label { display: block; font-weight: 700; margin-bottom: 5px; }
-        .settings-group input, .settings-group textarea {
-            width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #30363d;
-            background-color: rgba(0,0,0,0.5); color: #fff; box-sizing: border-box; font-family: 'Rajdhani', sans-serif;
+        .nav-links { display: flex; gap: 30px; z-index: 2; }
+        .nav-links a { color: #a0aec0; text-decoration: none; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; padding-bottom: 5px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--cyan); border-bottom: 2px solid var(--cyan); text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); }
+        
+        .btn-back { background: rgba(255,255,255,0.05); color: #fff; text-decoration: none; padding: 8px 20px; border-radius: 5px; font-weight: 600; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; z-index: 2; }
+        .btn-back:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+
+        /* --- HERO SECTION --- */
+        .hero { text-align: center; padding: 60px 20px 40px; }
+        .hero h1 { font-family: 'Orbitron', sans-serif; font-size: 4.5rem; font-weight: 900; background: linear-gradient(90deg, var(--cyan) 20%, var(--magenta) 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 2px; filter: drop-shadow(0 0 20px rgba(255, 0, 127, 0.4)); margin-bottom: 20px; }
+        
+        .stats-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .stat-badge { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 4px; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-badge span { color: var(--cyan); font-weight: 700; }
+        
+        .btn-register { background: linear-gradient(90deg, var(--cyan), var(--magenta)); color: #fff; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; padding: 15px 40px; border: none; cursor: pointer; text-transform: uppercase; border-radius: 4px; transition: 0.3s; box-shadow: 0 0 20px rgba(255, 0, 127, 0.5); letter-spacing: 2px; }
+        .btn-register:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 229, 255, 0.7); }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .main-container { display: grid; grid-template-columns: 2.2fr 1fr; gap: 20px; max-width: 1300px; margin: 0 auto 40px; padding: 0 20px; }
+        
+        .panel { background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid var(--panel-border); border-radius: 10px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
+        .panel::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+
+        .panel-title { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: #fff; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1px; display: flex; justify-content: space-between; }
+
+        /* --- BRACKET --- */
+        .bracket-container { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; }
+        .round { display: flex; flex-direction: column; justify-content: space-around; width: 22%; }
+        .round-title { text-align: center; font-size: 0.8rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        
+        .matchup { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 8px; border-radius: 4px; margin-bottom: 15px; position: relative; }
+        .team-slot { font-size: 0.85rem; padding: 4px 8px; margin: 2px 0; border-radius: 3px; background: rgba(0,0,0,0.3); color: #cbd5e1; display: flex; justify-content: space-between; }
+        .team-slot.winner { color: var(--cyan); border-left: 2px solid var(--cyan); background: rgba(0,229,255,0.1); }
+
+        .connector { position: absolute; right: -10px; top: 50%; width: 10px; height: 1px; background: var(--cyan); }
+        .connector::after { content: ''; position: absolute; right: 0; top: -20px; width: 1px; height: 40px; background: var(--cyan); }
+
+        /* --- LISTA DE EQUIPOS --- */
+        .team-list { display: flex; flex-direction: column; gap: 8px; }
+        .team-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 4px; border-left: 2px solid transparent; font-size: 0.9rem; font-weight: 600; }
+        .team-item.confirmed { border-left-color: var(--green); }
+        .team-status { display: flex; align-items: center; gap: 5px; color: var(--green); font-size: 0.8rem; }
+
+        /* --- SECCIÓN INFERIOR --- */
+        .bottom-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1300px; margin: 0 auto 50px; padding: 0 20px; }
+        .info-card { background: var(--panel-bg); backdrop-filter: blur(10px); border: 1px solid var(--panel-border); border-radius: 8px; padding: 20px; display: flex; align-items: center; gap: 15px; }
+        .info-icon { font-size: 2rem; color: var(--magenta); text-shadow: 0 0 10px rgba(255, 0, 127, 0.5); }
+        .info-text h3 { color: #fff; font-size: 1.1rem; text-transform: uppercase; margin-bottom: 2px; }
+        .info-text p { color: #a0aec0; font-size: 0.85rem; }
+
+        /* --- MODAL --- */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-content { background: rgba(13, 20, 33, 0.95); padding: 30px; border: 1px solid var(--cyan); border-radius: 10px; width: 90%; max-width: 600px; position: relative; box-shadow: 0 0 30px rgba(0, 229, 255, 0.2); max-height: 90vh; overflow-y: auto; }
+        .close-btn { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover { color: var(--magenta); }
+        .modal-content h2 { font-family: 'Orbitron', sans-serif; color: var(--cyan); margin-top: 0; text-align: center; margin-bottom: 20px; }
+        
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 5px; color: #fff; font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #30363d; background-color: rgba(0,0,0,0.5); color: #fff; font-family: 'Rajdhani', sans-serif; }
+        .form-group input:focus { outline: none; border-color: var(--magenta); }
+        
+        .players-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .players-grid .form-group:last-child { grid-column: span 2; }
+        
+        .payment-info { background-color: rgba(255, 193, 7, 0.1); border: 1px dashed var(--gold); padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center; color: var(--gold); font-weight: 500; font-size: 0.9rem; }
+        .payment-info strong { font-size: 1.1rem; display: block; margin-bottom: 5px; }
+
+        /* --- NOTIFICACIÓN TOAST --- */
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast {
+            background: rgba(13, 20, 33, 0.95); backdrop-filter: blur(10px);
+            border-left: 4px solid var(--cyan); padding: 15px 20px; border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); color: #fff; font-weight: 600;
+            transform: translateX(120%); transition: transform 0.3s ease; display: flex; align-items: center; gap: 10px;
+            border: 1px solid rgba(0, 229, 255, 0.2); border-left: 4px solid var(--cyan);
         }
-        .settings-group textarea { height: 100px; resize: vertical; }
-        
-        /* Tabla */
-        .table-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th, td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        th { color: var(--cyan); font-family: 'Orbitron', sans-serif; font-size: 0.9rem;}
-        .status-pending { color: var(--yellow); font-weight: bold; }
-        
-        .btn-approve {
-            background-color: var(--green); color: #000; padding: 8px 15px;
-            border: none; border-radius: 5px; cursor: pointer; font-weight: 700; transition: 0.3s;
-        }
-        .btn-approve:hover { background-color: #00c853; box-shadow: 0 0 10px rgba(0,230,118,0.5); }
-        
-        @media (max-width: 768px) {
-            .settings-grid { grid-template-columns: 1fr; }
-            .header-panel { flex-direction: column; gap: 15px; text-align: center; }
+        .toast.show { transform: translateX(0); }
+        .toast.error { border-left-color: #da3633; border-color: rgba(218, 54, 51, 0.2); }
+        .toast.success { border-left-color: var(--green); border-color: rgba(0, 230, 118, 0.2); }
+
+        @media (max-width: 900px) {
+            .main-container { grid-template-columns: 1fr; }
+            .bottom-section { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .bracket-container { display: none; }
+            .players-grid { grid-template-columns: 1fr; }
+            .players-grid .form-group:last-child { grid-column: span 1; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-overlay"></div>
-    <div class="hex-pattern"></div>
+    <!-- CONTENEDOR DE NOTIFICACIONES -->
+    <div class="toast-container" id="toast-container"></div>
 
-    <a href="index.html" class="btn-back">← Volver a la Portada</a>
-
-    <!-- LOGIN -->
-    <div id="login-section" class="login-container">
-        <h1>Acceso Organizador</h1>
-        <form id="login-form">
-            <div class="input-group">
-                <label>Correo Electrónico</label>
-                <input type="email" id="email" required placeholder="tu@correo.com">
-            </div>
-            <div class="input-group">
-                <label>Contraseña</label>
-                <input type="password" id="password" required placeholder="********">
-            </div>
-            <button type="submit" class="btn-esports" id="btn-login">Iniciar Sesión</button>
-        </form>
-    </div>
-
-    <!-- PANEL -->
-    <div id="dashboard">
-        <div class="header-panel">
-            <h1>Panel de Control</h1>
-            <button class="btn-logout" id="btn-logout">Cerrar Sesión</button>
+    <nav>
+        <a href="index.html" class="logo">
+            <img src="logo-nuevo.png" alt="Logo"> ARENA WILDRIFT
+        </a>
+        <div class="nav-links">
+            <a href="#" class="active">Inicio</a>
+            <a href="#">Torneos</a>
+            <a href="#">Equipos</a>
+            <a href="#">Noticias</a>
+            <a href="#">Streaming</a>
+            <a href="#">Clasificación</a>
         </div>
+        <a href="index.html" class="btn-back">Volver a la portada</a>
+    </nav>
 
-        <!-- CONFIGURACIÓN -->
-        <div class="panel-box">
-            <h2>Configuración del Torneo</h2>
-            <div class="settings-grid">
-                <div class="settings-group">
-                    <label>Costo de Inscripción (Ej: $5 USD)</label>
-                    <input type="text" id="setting-fee">
-                </div>
-                <div class="settings-group">
-                    <label>Pozo de Premios (Ej: $100 USD)</label>
-                    <input type="text" id="setting-prize">
-                </div>
-            </div>
-            <div class="settings-group">
-                <label>Métodos de Pago (Escribe uno por línea)</label>
-                <textarea id="setting-payments"></textarea>
-            </div>
-            <br>
-            <button class="btn-esports" id="btn-save-settings" style="max-width: 250px; font-size: 1rem;">Guardar Configuración</button>
+    <header class="hero">
+        <h1>PRÓXIMO TORNEO</h1>
+        <div class="stats-container">
+            <div class="stat-badge">📅 Fecha: <span id="ui-date">Por definir</span></div>
+            <div class="stat-badge">⚔️ Formato: <span>5v5</span></div>
+            <div class="stat-badge">🎟️ Entrada: <span id="ui-entry-fee">Cargando...</span></div>
+            <div class="stat-badge">💰 Pozo: <span id="ui-prize">Cargando...</span></div>
         </div>
+        <button class="btn-register" id="btn-abrir-modal">Inscribir mi Equipo</button>
+    </header>
 
-        <!-- EQUIPOS PENDIENTES -->
-        <div class="panel-box">
-            <h2>Equipos Pendientes de Aprobación</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th><th>Equipo</th><th>Capitán</th><th>Jugadores (Riot IDs)</th><th>Contacto</th><th>N° Referencia</th><th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-equipos"></tbody>
-                </table>
-                <div id="mensaje-vacio" style="display:none; text-align:center; padding:20px; color:#8b949e;">No hay equipos pendientes por ahora.</div>
+    <main class="main-container">
+        <section class="panel">
+            <div class="panel-title">Soporte del Torneo (Bracket)</div>
+            <div class="bracket-container">
+                <div class="round">
+                    <div class="round-title">Octavos</div>
+                    <div class="matchup"><div class="team-slot winner">Equipo A</div><div class="team-slot">Equipo B</div><div class="connector"></div></div>
+                    <div class="matchup"><div class="team-slot">Equipo C</div><div class="team-slot winner">Equipo D</div><div class="connector"></div></div>
+                    <div class="matchup"><div class="team-slot winner">Equipo E</div><div class="team-slot">Equipo F</div><div class="connector"></div></div>
+                    <div class="matchup"><div class="team-slot">Equipo G</div><div class="team-slot winner">Equipo H</div><div class="connector"></div></div>
+                </div>
+                <div class="round">
+                    <div class="round-title">Cuartos</div>
+                    <div class="matchup"><div class="team-slot winner">Equipo A</div><div class="team-slot">Equipo D</div><div class="connector"></div></div>
+                    <div class="matchup"><div class="team-slot winner">Equipo E</div><div class="team-slot">Equipo H</div><div class="connector"></div></div>
+                </div>
+                <div class="round">
+                    <div class="round-title">Semis</div>
+                    <div class="matchup"><div class="team-slot winner">Equipo A</div><div class="team-slot">Equipo E</div><div class="connector"></div></div>
+                </div>
+                <div class="round">
+                    <div class="round-title">Final</div>
+                    <div class="matchup" style="border-color: var(--gold);">
+                        <div class="team-slot winner" style="color: var(--gold); border-left-color: var(--gold);">Equipo A</div>
+                        <div class="team-slot" style="color: #8b949e;">Por definir</div>
+                    </div>
+                </div>
             </div>
+        </section>
+
+        <aside class="panel">
+            <div class="panel-title">
+                Equipos Confirmados
+                <span style="color: var(--cyan); font-size: 0.9rem;" id="team-count">0/16</span>
+            </div>
+            <div class="team-list" id="lista-equipos">
+                <p style="color: #8b949e; text-align: center; font-style: italic;">Cargando equipos...</p>
+            </div>
+        </aside>
+    </main>
+
+    <section class="bottom-section">
+        <div class="info-card">
+            <div class="info-icon">⚖️</div>
+            <div class="info-text">
+                <h3>Reglamento</h3>
+                <p>Descarga el PDF oficial</p>
+            </div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">🗺️</div>
+            <div class="info-text">
+                <h3>Mapa</h3>
+                <p>Wild Rift Layout</p>
+            </div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">🏆</div>
+            <div class="info-text">
+                <h3>Premios</h3>
+                <p id="ui-rules-prize">Por definir</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="modal-inscripcion" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="cerrar-modal">&times;</span>
+            <h2>Inscripción de Equipo</h2>
+            
+            <div class="payment-info">
+                <strong id="ui-modal-fee">Costo: Cargando...</strong>
+                <div id="ui-modal-payments">Cargando métodos de pago...</div>
+                <br><i>Una vez pagues, coloca el número de referencia abajo.</i>
+            </div>
+
+            <form id="form-inscripcion">
+                <div class="form-group">
+                    <label>Nombre del Equipo</label>
+                    <input type="text" id="team_name" required placeholder="Ej: Alpha Squad">
+                </div>
+                <div class="form-group">
+                    <label>Nombre del Capitán</label>
+                    <input type="text" id="captain_name" required placeholder="Tu nombre o nick">
+                </div>
+                
+                <label style="color: var(--cyan); font-weight: 700; margin-bottom: 5px; display: block;">Riot IDs de los 5 Jugadores</label>
+                <div class="players-grid">
+                    <div class="form-group">
+                        <input type="text" id="player_1" required placeholder="Jugador 1 (Top)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="player_2" required placeholder="Jugador 2 (Jungla)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="player_3" required placeholder="Jugador 3 (Mid)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="player_4" required placeholder="Jugador 4 (ADC)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="player_5" required placeholder="Jugador 5 (Support)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Discord o WhatsApp</label>
+                    <input type="text" id="contact_info" required placeholder="Ej: @miusuario#1234">
+                </div>
+                <div class="form-group">
+                    <label>Número de Referencia del Pago</label>
+                    <input type="text" id="payment_proof" required placeholder="Ej: 123456789">
+                </div>
+                <button type="submit" class="btn-register" id="btn-enviar" style="width: 100%; font-size: 1rem; padding: 12px;">Enviar Inscripción</button>
+            </form>
         </div>
     </div>
 
@@ -184,99 +294,107 @@
         const { createClient } = supabase;
         const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const loginSection = document.getElementById('login-section');
-        const dashboard = document.getElementById('dashboard');
+        // --- FUNCIÓN PARA MOSTRAR LAS NOTIFICACIONES (TOAST) ---
+        function mostrarNotificacion(mensaje, tipo = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${tipo}`;
+            
+            // Icono según el tipo
+            const icon = tipo === 'success' ? '✅' : '❌';
+            
+            toast.innerHTML = `<span style="font-size:1.2rem;">${icon}</span> ${mensaje}`;
+            container.appendChild(toast);
 
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btn-login');
-            btn.textContent = 'Verificando...';
-            const { error } = await db.auth.signInWithPassword({
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value
-            });
-            if (error) { alert('Error: ' + error.message); btn.textContent = 'Iniciar Sesión'; } 
-            else { mostrarDashboard(); btn.textContent = 'Iniciar Sesión'; }
-        });
+            // Animación de entrada
+            setTimeout(() => { toast.classList.add('show'); }, 100);
 
-        document.getElementById('btn-logout').addEventListener('click', async () => {
-            await db.auth.signOut();
-            location.reload();
-        });
-
-        async function checkSession() {
-            const { data: { session } } = await db.auth.getSession();
-            if (session) mostrarDashboard();
+            // Eliminar después de 4 segundos
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => { toast.remove(); }, 300); 
+            }, 4000);
         }
 
-        async function mostrarDashboard() {
-            loginSection.style.display = 'none';
-            dashboard.style.display = 'block';
-            cargarConfiguracion();
-            cargarEquiposPendientes();
+        async function cargarEquipos() {
+            const listaHTML = document.getElementById('lista-equipos');
+            const contadorHTML = document.getElementById('team-count');
+            
+            const { data, error } = await db.from('teams').select('*').eq('status', 'Confirmado');
+            
+            if (error) { listaHTML.innerHTML = '<p style="color:red; text-align:center;">Error de conexión.</p>'; return; }
+            
+            contadorHTML.innerText = `${data.length}/16`;
+
+            if (data.length === 0) { listaHTML.innerHTML = '<p style="color:#8b949e; text-align:center;">Aún no hay equipos confirmados.</p>'; return; }
+            
+            listaHTML.innerHTML = ''; 
+            data.forEach(equipo => {
+                listaHTML.innerHTML += `
+                    <div class="team-item confirmed">
+                        <span>🛡️ ${equipo.team_name}</span>
+                        <span class="team-status">✔ Confirmado</span>
+                    </div>
+                `;
+            });
         }
 
         async function cargarConfiguracion() {
             const { data, error } = await db.from('settings').select('*').eq('id', 1).single();
             if (data) {
-                document.getElementById('setting-fee').value = data.entry_fee;
-                document.getElementById('setting-prize').value = data.prize_pool;
-                document.getElementById('setting-payments').value = data.payment_methods;
+                document.getElementById('ui-entry-fee').innerText = data.entry_fee;
+                document.getElementById('ui-prize').innerText = data.prize_pool;
+                document.getElementById('ui-rules-prize').innerText = `Pozo: ${data.prize_pool}`;
+                document.getElementById('ui-modal-fee').innerText = `Costo de Inscripción: ${data.entry_fee}`;
+                document.getElementById('ui-modal-payments').innerHTML = data.payment_methods.replace(/\n/g, '<br>');
             }
         }
 
-        document.getElementById('btn-save-settings').addEventListener('click', async () => {
-            const btn = document.getElementById('btn-save-settings');
-            btn.textContent = 'Guardando...';
-            const nuevosDatos = {
-                entry_fee: document.getElementById('setting-fee').value,
-                prize_pool: document.getElementById('setting-prize').value,
-                payment_methods: document.getElementById('setting-payments').value
+        cargarEquipos();
+        cargarConfiguracion();
+
+        const modal = document.getElementById('modal-inscripcion');
+        const btnAbrir = document.getElementById('btn-abrir-modal');
+        const closeBtn = document.getElementById('cerrar-modal');
+        const formInscripcion = document.getElementById('form-inscripcion');
+        const btnEnviar = document.getElementById('btn-enviar');
+
+        btnAbrir.addEventListener('click', () => { modal.style.display = 'flex'; });
+        closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+        window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+        formInscripcion.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnEnviar.textContent = 'Enviando...';
+            btnEnviar.disabled = true;
+
+            const nuevoEquipo = {
+                team_name: document.getElementById('team_name').value,
+                captain_name: document.getElementById('captain_name').value,
+                player_1: document.getElementById('player_1').value,
+                player_2: document.getElementById('player_2').value,
+                player_3: document.getElementById('player_3').value,
+                player_4: document.getElementById('player_4').value,
+                player_5: document.getElementById('player_5').value,
+                contact_info: document.getElementById('contact_info').value,
+                payment_proof: document.getElementById('payment_proof').value,
+                status: 'Pendiente'
             };
-            const { error } = await db.from('settings').update(nuevosDatos).eq('id', 1);
-            if (error) { alert('Error al guardar'); console.error(error); } 
-            else { alert('¡Configuración guardada con éxito!'); }
-            btn.textContent = 'Guardar Configuración';
+
+            const { error } = await db.from('teams').insert([nuevoEquipo]);
+
+            if (error) {
+                mostrarNotificacion('Error al enviar. Revisa la consola.', 'error');
+                console.error(error);
+            } else {
+                // NOTIFICACIÓN BONITA EN VEZ DE ALERT
+                mostrarNotificacion('¡Inscripción recibida! Pendiente de revisión por el organizador.', 'success');
+                formInscripcion.reset();
+                modal.style.display = 'none';
+            }
+            btnEnviar.textContent = 'Enviar Inscripción';
+            btnEnviar.disabled = false;
         });
-
-        async function cargarEquiposPendientes() {
-            const { data, error } = await db.from('teams').select('*').eq('status', 'Pendiente');
-            if (error) return;
-            const tablaEquipos = document.getElementById('tabla-equipos');
-            const mensajeVacio = document.getElementById('mensaje-vacio');
-            tablaEquipos.innerHTML = '';
-            if (data.length === 0) { mensajeVacio.style.display = 'block'; return; }
-            mensajeVacio.style.display = 'none';
-            
-            data.forEach(equipo => {
-                const fila = document.createElement('tr');
-                fila.innerHTML = `
-                    <td>${equipo.id}</td>
-                    <td style="font-weight:bold; color:white;">${equipo.team_name}</td>
-                    <td>${equipo.captain_name}</td>
-                    <td style="font-size:0.85rem; color:#a0aec0;">
-                        1: ${equipo.player_1 || '-'}<br>
-                        2: ${equipo.player_2 || '-'}<br>
-                        3: ${equipo.player_3 || '-'}<br>
-                        4: ${equipo.player_4 || '-'}<br>
-                        5: ${equipo.player_5 || '-'}
-                    </td>
-                    <td>${equipo.contact_info}</td>
-                    <!-- CAMBIO AQUÍ: Ahora muestra el número en texto directo -->
-                    <td style="font-weight:bold; color:var(--cyan);">${equipo.payment_proof}</td>
-                    <td><button class="btn-approve" onclick="aprobarEquipo(${equipo.id})">Aprobar</button></td>
-                `;
-                tablaEquipos.appendChild(fila);
-            });
-        }
-
-        window.aprobarEquipo = async function(id) {
-            if (!confirm('¿Aprobar este equipo? Aparecerá en la web pública.')) return;
-            const { error } = await db.from('teams').update({ status: 'Confirmado' }).eq('id', id);
-            if (!error) cargarEquiposPendientes();
-        }
-
-        checkSession();
     </script>
 </body>
 </html>
