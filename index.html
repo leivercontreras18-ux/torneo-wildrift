@@ -3,42 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena Wild Rift #1 | Torneo Oficial</title>
-    <!-- Importamos una fuente estilo gamer desde Google Fonts -->
+    <title>Arena Wild Rift | Torneo Oficial</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- CDN de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
-        /* --- ESTILOS GLOBALES Y TRANSPARENCIA --- */
         :root {
-            --bg-color: #0d1117;       /* Fondo oscuro */
-            --panel-bg: #161b22;       /* Fondo de paneles */
-            --text-main: #c9d1d9;      /* Texto claro */
-            --cyan: #00e5ff;           /* Neón Cyan */
-            --magenta: #ff007f;        /* Neón Magenta */
-            --gold: #ffc107;           /* Dorado premios */
-            --green: #00e676;          /* Estado confirmado */
-            --yellow: #ffab00;         /* Estado pendiente */
+            --bg-color: #0d1117;
+            --panel-bg: #161b22;
+            --text-main: #c9d1d9;
+            --cyan: #00e5ff;
+            --magenta: #ff007f;
+            --gold: #ffc107;
+            --green: #00e676;
+            --yellow: #ffab00;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: 'Rajdhani', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box;
         }
 
-        /* --- BARRA DE NAVEGACIÓN --- */
+        /* BARRA DE NAVEGACIÓN */
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px;
-            background-color: rgba(13, 17, 23, 0.9);
-            border-bottom: 1px solid #30363d;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 40px; background-color: rgba(13, 17, 23, 0.9);
+            border-bottom: 1px solid #30363d; position: sticky; top: 0; z-index: 100;
         }
         .logo { font-weight: 700; font-size: 1.5rem; color: #fff; display: flex; align-items: center; gap: 10px;}
         .logo span { color: var(--magenta); }
@@ -47,132 +41,87 @@
         .nav-links a:hover, .nav-links a.active { color: var(--cyan); border-bottom: 2px solid var(--cyan); }
         .nav-icons { display: flex; gap: 15px; font-size: 1.2rem; cursor: pointer; }
 
-        /* --- HERO SECTION --- */
+        /* PORTADA PRINCIPAL (HERO) */
         .hero {
-            text-align: center;
-            padding: 60px 20px;
+            text-align: center; padding: 60px 20px;
             background: radial-gradient(circle at center, #1a1a2e 0%, var(--bg-color) 100%);
             border-bottom: 1px solid #30363d;
         }
         .hero h1 {
-            font-size: 4rem;
-            margin: 0 0 15px 0;
+            font-size: 4rem; margin: 0 0 15px 0;
             background: linear-gradient(90deg, var(--cyan), var(--magenta));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase;
         }
         .badges { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;}
         .badge {
-            border: 1px solid #30363d;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 700;
-            background: var(--panel-bg);
+            border: 1px solid #30363d; padding: 8px 20px; border-radius: 20px;
+            font-weight: 700; background: var(--panel-bg);
         }
         .badge.prize { border-color: var(--gold); color: var(--gold); font-size: 1.2rem;}
         
         .btn-primary {
             background: linear-gradient(90deg, var(--cyan), var(--magenta));
-            color: #fff;
-            padding: 15px 40px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.3s;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+            color: #fff; padding: 15px 40px; font-size: 1.3rem; font-weight: 700;
+            border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase;
+            transition: 0.3s; box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+            text-decoration: none; display: inline-block;
         }
         .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--cyan); }
 
-        /* --- PANEL PRINCIPAL (BRACKET Y EQUIPOS) --- */
+        /* PANEL PRINCIPAL */
         .main-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            padding: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: grid; grid-template-columns: 2fr 1fr; gap: 20px;
+            padding: 40px; max-width: 1200px; margin: 0 auto;
         }
         
         .panel {
-            background-color: var(--panel-bg);
-            border: 1px solid #30363d;
-            border-radius: 10px;
-            padding: 20px;
+            background-color: var(--panel-bg); border: 1px solid #30363d;
+            border-radius: 10px; padding: 20px;
         }
         .panel h2 { margin-top: 0; font-size: 1.5rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
 
-        /* Simulación visual del Bracket */
-        .bracket {
-            display: flex;
-            justify-content: space-between;
-            text-align: center;
-        }
+        /* Bracket Vacío */
+        .bracket { display: flex; justify-content: space-between; text-align: center; }
         .round { display: flex; flex-direction: column; justify-content: space-around; width: 30%; }
         .round-title { font-weight: 700; color: var(--cyan); margin-bottom: 15px;}
         .matchup {
-            background: #21262d;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            font-weight: 500;
-            border-left: 3px solid var(--magenta);
+            background: #21262d; padding: 15px; border-radius: 5px; margin-bottom: 10px;
+            font-weight: 500; border-left: 3px solid #30363d; color: #8b949e;
         }
 
         /* Lista de Equipos */
-        .team-list { display: flex; flex-direction: column; gap: 10px; }
+        .team-list { display: flex; flex-direction: column; gap: 10px; text-align: center; padding: 20px 0;}
+        .empty-state { color: #8b949e; font-style: italic; }
         .team-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #21262d;
-            padding: 10px 15px;
-            border-radius: 5px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #21262d; padding: 10px 15px; border-radius: 5px;
+            text-align: left; font-weight: 700;
         }
         .status { font-size: 0.8rem; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
         .status.confirmed { background: rgba(0, 230, 118, 0.2); color: var(--green); border: 1px solid var(--green);}
-        .status.pending { background: rgba(255, 171, 0, 0.2); color: var(--yellow); border: 1px solid var(--yellow);}
 
-        /* --- SECCIÓN REGLAS Y PREMIOS --- */
+        /* REGLAS Y PREMIOS */
         .rules-section {
-            max-width: 1200px;
-            margin: 0 auto 40px auto;
-            padding: 20px;
-            background: var(--panel-bg);
-            border: 1px solid #30363d;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            text-align: center;
+            max-width: 1200px; margin: 0 auto 40px auto; padding: 20px;
+            background: var(--panel-bg); border: 1px solid #30363d; border-radius: 10px;
+            display: flex; justify-content: space-between; text-align: center;
         }
         .rule-box { flex: 1; padding: 10px; border-right: 1px solid #30363d; }
         .rule-box:last-child { border-right: none; }
         .rule-box h3 { color: var(--cyan); margin-bottom: 5px; }
 
-        /* --- FOOTER LEGAL (TRANSPARENCIA) --- */
+        /* FOOTER LEGAL */
         footer {
-            text-align: center;
-            padding: 30px;
-            background: #090c10;
-            border-top: 1px solid #30363d;
-            font-size: 0.9rem;
+            text-align: center; padding: 30px; background: #090c10;
+            border-top: 1px solid #30363d; font-size: 0.9rem;
         }
-        .legal-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            margin: 0 10px;
-            transition: 0.3s;
-        }
+        .legal-links a { color: var(--text-main); text-decoration: none; margin: 0 10px; transition: 0.3s; }
         .legal-links a:hover { color: var(--magenta); }
         .transparency-note { margin-top: 15px; color: #8b949e; font-size: 0.8rem; }
 
-        /* --- RESPONSIVE (PARA CELULARES) --- */
         @media (max-width: 768px) {
             .main-container { grid-template-columns: 1fr; padding: 15px; }
-            .nav-links { display: none; } /* Se oculta el menú en móvil para que no se vea amontonado */
+            .nav-links { display: none; }
             .hero h1 { font-size: 2.5rem; }
             .rules-section { flex-direction: column; gap: 20px; }
             .rule-box { border-right: none; border-bottom: 1px solid #30363d; padding-bottom: 15px; }
@@ -181,7 +130,6 @@
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN -->
     <nav>
         <div class="logo">🛡️ ARENA <span>WILDRIFT</span></div>
         <div class="nav-links">
@@ -192,82 +140,59 @@
         </div>
         <div class="nav-icons">
             <span title="Perfil de Jugador">👤</span>
-            <!-- Este icono luego nos llevará al panel de administrador -->
             <span title="Panel de Organizador">👥</span>
         </div>
     </nav>
 
-    <!-- PORTADA PRINCIPAL (HERO) -->
     <header class="hero">
-        <h1>Arena Wild Rift #1</h1>
+        <h1>Próximo Torneo</h1>
         <div class="badges">
-            <span class="badge">📅 15 de Noviembre</span>
-            <span class="badge">⚔️ 5v5 - Eliminación Directa</span>
-            <span class="badge prize">💰 Pozo: $100 USD</span>
+            <span class="badge">📅 Fecha por definir</span>
+            <span class="badge">⚔️ Formato por definir</span>
+            <span class="badge prize">💰 Pozo: Por definir</span>
         </div>
-        <button class="btn-primary">Inscribir mi Equipo</button>
+        <!-- El botón ahora es un enlace listo para conectar al formulario -->
+        <a href="#" class="btn-primary">Inscribir mi Equipo</a>
     </header>
 
-    <!-- CONTENEDOR PRINCIPAL -->
     <main class="main-container">
         
-        <!-- SECCIÓN DEL BRACKET -->
         <section class="panel">
             <h2>Soporte del Torneo (Bracket)</h2>
             <div class="bracket">
                 <div class="round">
-                    <div class="round-title">Cuartos de Final</div>
-                    <div class="matchup">Team A vs Team B</div>
-                    <div class="matchup">Team C vs Team D</div>
-                    <div class="matchup">Team E vs Team F</div>
-                    <div class="matchup">Team G vs Team H</div>
+                    <div class="round-title">Ronda 1</div>
+                    <div class="matchup">Por definir</div>
+                    <div class="matchup">Por definir</div>
+                    <div class="matchup">Por definir</div>
+                    <div class="matchup">Por definir</div>
                 </div>
                 <div class="round">
                     <div class="round-title">Semifinales</div>
-                    <div class="matchup">Ganador A/B vs C/D</div>
-                    <div class="matchup">Ganador E/F vs G/H</div>
+                    <div class="matchup">Por definir</div>
+                    <div class="matchup">Por definir</div>
                 </div>
                 <div class="round">
                     <div class="round-title">Gran Final</div>
-                    <div class="matchup" style="border-left-color: var(--gold);">Por definir</div>
+                    <div class="matchup">Por definir</div>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN DE EQUIPOS -->
         <aside class="panel">
-            <h2>Equipos Inscritos</h2>
-            <div class="team-list">
-                <div class="team-item">
-                    <span>🛡️ Alpha Squad</span>
-                    <span class="status confirmed">Confirmado</span>
-                </div>
-                <div class="team-item">
-                    <span>⚡ Nova Esports</span>
-                    <span class="status confirmed">Confirmado</span>
-                </div>
-                <div class="team-item">
-                    <span>🔥 Velocity</span>
-                    <span class="status confirmed">Confirmado</span>
-                </div>
-                <div class="team-item">
-                    <span>🐉 Crimson Fury</span>
-                    <span class="status pending">Pendiente</span>
-                </div>
-                <div class="team-item">
-                    <span>🌪️ Zenith Gaming</span>
-                    <span class="status pending">Pendiente</span>
-                </div>
+            <h2>Equipos Confirmados</h2>
+            <!-- Aquí el JavaScript inyectará los equipos reales de Supabase -->
+            <div class="team-list" id="lista-equipos">
+                <p class="empty-state">Cargando equipos...</p>
             </div>
         </aside>
 
     </main>
 
-    <!-- SECCIÓN DE REGLAS Y PREMIOS -->
     <section class="rules-section">
         <div class="rule-box">
             <h3>⚖️ Reglamento</h3>
-            <p>+18 Años<br>Juego Limpio<br>Respeto en el Chat</p>
+            <p>Requisitos<br>Juego Limpio<br>Respeto</p>
         </div>
         <div class="rule-box">
             <h3>🗺️ Mapa</h3>
@@ -275,11 +200,10 @@
         </div>
         <div class="rule-box">
             <h3>🏆 Premios</h3>
-            <p>1er Lugar: $100 USD + Rango<br>2do Lugar: $50 USD</p>
+            <p>Reparto del pozo:<br>Por definir</p>
         </div>
     </section>
 
-    <!-- FOOTER LEGAL Y TRANSPARENCIA -->
     <footer>
         <div class="legal-links">
             <a href="#">Términos y Condiciones</a> | 
@@ -292,5 +216,52 @@
         </div>
     </footer>
 
+    <!-- LÓGICA DE CONEXIÓN CON SUPABASE -->
+    <script>
+        // 1. Tus llaves de conexión
+        const SUPABASE_URL = 'https://evlogrwanimynsodcdzu.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_ltDzkQz__8Nt1b68BSs-Sw_2ylQACi1';
+
+        // 2. Iniciamos la conexión
+        const { createClient } = supabase;
+        const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // 3. Función para cargar los equipos
+        async function cargarEquipos() {
+            const listaHTML = document.getElementById('lista-equipos');
+            
+            // Buscamos en la tabla 'teams' solo los que estén 'Confirmados'
+            const { data, error } = await db
+                .from('teams')
+                .select('*')
+                .eq('status', 'Confirmado');
+
+            if (error) {
+                console.error('Error cargando equipos:', error);
+                listaHTML.innerHTML = '<p class="empty-state" style="color:red;">Error de conexión con la base de datos.</p>';
+                return;
+            }
+
+            // Si la base de datos está vacía, mostramos mensaje
+            if (data.length === 0) {
+                listaHTML.innerHTML = '<p class="empty-state">Aún no hay equipos confirmados para este torneo.</p>';
+                return;
+            }
+
+            // Si hay equipos, los dibujamos
+            listaHTML.innerHTML = ''; 
+            data.forEach(equipo => {
+                listaHTML.innerHTML += `
+                    <div class="team-item">
+                        <span>🛡️ ${equipo.team_name}</span>
+                        <span class="status confirmed">Confirmado</span>
+                    </div>
+                `;
+            });
+        }
+
+        // 4. Ejecutamos la función al cargar la página
+        cargarEquipos();
+    </script>
 </body>
 </html>
