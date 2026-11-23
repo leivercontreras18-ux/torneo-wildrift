@@ -5,27 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arena Wild Rift | Torneo Oficial</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    
-    <!-- CDN de Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         :root {
-            --bg-color: #0d1117;
-            --panel-bg: #161b22;
-            --text-main: #c9d1d9;
-            --cyan: #00e5ff;
-            --magenta: #ff007f;
-            --gold: #ffc107;
-            --green: #00e676;
-            --yellow: #ffab00;
+            --bg-color: #0d1117; --panel-bg: #161b22; --text-main: #c9d1d9;
+            --cyan: #00e5ff; --magenta: #ff007f; --gold: #ffc107;
+            --green: #00e676; --yellow: #ffab00;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Rajdhani', sans-serif;
-            margin: 0; padding: 0; box-sizing: border-box;
+            background-color: var(--bg-color); color: var(--text-main);
+            font-family: 'Rajdhani', sans-serif; margin: 0; padding: 0; box-sizing: border-box;
         }
 
         /* BARRA DE NAVEGACIÓN */
@@ -73,14 +64,13 @@
             display: grid; grid-template-columns: 2fr 1fr; gap: 20px;
             padding: 40px; max-width: 1200px; margin: 0 auto;
         }
-        
         .panel {
             background-color: var(--panel-bg); border: 1px solid #30363d;
             border-radius: 10px; padding: 20px;
         }
         .panel h2 { margin-top: 0; font-size: 1.5rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
 
-        /* Bracket Vacío */
+        /* Bracket */
         .bracket { display: flex; justify-content: space-between; text-align: center; }
         .round { display: flex; flex-direction: column; justify-content: space-around; width: 30%; }
         .round-title { font-weight: 700; color: var(--cyan); margin-bottom: 15px;}
@@ -119,6 +109,34 @@
         .legal-links a:hover { color: var(--magenta); }
         .transparency-note { margin-top: 15px; color: #8b949e; font-size: 0.8rem; }
 
+        /* --- ESTILOS DEL MODAL (VENTANA EMERGENTE) --- */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);
+            justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background-color: var(--panel-bg); padding: 30px;
+            border: 1px solid var(--cyan); border-radius: 10px;
+            width: 90%; max-width: 500px; position: relative;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+        }
+        .close-btn {
+            position: absolute; top: 15px; right: 20px;
+            color: var(--text-main); font-size: 28px; font-weight: bold; cursor: pointer;
+        }
+        .close-btn:hover { color: var(--magenta); }
+        .modal-content h2 { color: var(--cyan); margin-top: 0; text-align: center; }
+        
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 5px; color: var(--text-main); }
+        .form-group input {
+            width: 100%; padding: 10px; border-radius: 5px;
+            border: 1px solid #30363d; background-color: #0d1117;
+            color: #fff; font-family: 'Rajdhani', sans-serif; box-sizing: border-box;
+        }
+        .form-group input:focus { outline: none; border-color: var(--magenta); }
+
         @media (max-width: 768px) {
             .main-container { grid-template-columns: 1fr; padding: 15px; }
             .nav-links { display: none; }
@@ -140,7 +158,6 @@
         </div>
         <div class="nav-icons">
             <span title="Perfil de Jugador">👤</span>
-            <span title="Panel de Organizador">👥</span>
         </div>
     </nav>
 
@@ -151,12 +168,37 @@
             <span class="badge">⚔️ Formato por definir</span>
             <span class="badge prize">💰 Pozo: Por definir</span>
         </div>
-        <!-- El botón ahora es un enlace listo para conectar al formulario -->
-        <a href="#" class="btn-primary">Inscribir mi Equipo</a>
+        <button class="btn-primary" id="btn-abrir-modal">Inscribir mi Equipo</button>
     </header>
 
+    <!-- VENTANA EMERGENTE (MODAL) DE INSCRIPCIÓN -->
+    <div id="modal-inscripcion" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="cerrar-modal">&times;</span>
+            <h2>Inscripción de Equipo</h2>
+            <form id="form-inscripcion">
+                <div class="form-group">
+                    <label for="team_name">Nombre del Equipo</label>
+                    <input type="text" id="team_name" required placeholder="Ej: Alpha Squad">
+                </div>
+                <div class="form-group">
+                    <label for="captain_name">Nombre del Capitán</label>
+                    <input type="text" id="captain_name" required placeholder="Tu nombre o nick">
+                </div>
+                <div class="form-group">
+                    <label for="contact_info">Discord o WhatsApp</label>
+                    <input type="text" id="contact_info" required placeholder="Ej: @miusuario#1234">
+                </div>
+                <div class="form-group">
+                    <label for="payment_proof">Enlace del Comprobante de Pago</label>
+                    <input type="url" id="payment_proof" required placeholder="Pega el link de tu captura (Imgur, Drive, etc.)">
+                </div>
+                <button type="submit" class="btn-primary" id="btn-enviar" style="width: 100%;">Enviar Inscripción</button>
+            </form>
+        </div>
+    </div>
+
     <main class="main-container">
-        
         <section class="panel">
             <h2>Soporte del Torneo (Bracket)</h2>
             <div class="bracket">
@@ -181,12 +223,10 @@
 
         <aside class="panel">
             <h2>Equipos Confirmados</h2>
-            <!-- Aquí el JavaScript inyectará los equipos reales de Supabase -->
             <div class="team-list" id="lista-equipos">
                 <p class="empty-state">Cargando equipos...</p>
             </div>
         </aside>
-
     </main>
 
     <section class="rules-section">
@@ -216,39 +256,26 @@
         </div>
     </footer>
 
-    <!-- LÓGICA DE CONEXIÓN CON SUPABASE -->
     <script>
-        // 1. Tus llaves de conexión
+        // --- CONEXIÓN SUPABASE ---
         const SUPABASE_URL = 'https://evlogrwanimynsodcdzu.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_ltDzkQz__8Nt1b68BSs-Sw_2ylQACi1';
-
-        // 2. Iniciamos la conexión
         const { createClient } = supabase;
         const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // 3. Función para cargar los equipos
+        // --- CARGAR EQUIPOS CONFIRMADOS ---
         async function cargarEquipos() {
             const listaHTML = document.getElementById('lista-equipos');
-            
-            // Buscamos en la tabla 'teams' solo los que estén 'Confirmados'
-            const { data, error } = await db
-                .from('teams')
-                .select('*')
-                .eq('status', 'Confirmado');
+            const { data, error } = await db.from('teams').select('*').eq('status', 'Confirmado');
 
             if (error) {
-                console.error('Error cargando equipos:', error);
-                listaHTML.innerHTML = '<p class="empty-state" style="color:red;">Error de conexión con la base de datos.</p>';
+                listaHTML.innerHTML = '<p class="empty-state" style="color:red;">Error de conexión.</p>';
                 return;
             }
-
-            // Si la base de datos está vacía, mostramos mensaje
             if (data.length === 0) {
-                listaHTML.innerHTML = '<p class="empty-state">Aún no hay equipos confirmados para este torneo.</p>';
+                listaHTML.innerHTML = '<p class="empty-state">Aún no hay equipos confirmados.</p>';
                 return;
             }
-
-            // Si hay equipos, los dibujamos
             listaHTML.innerHTML = ''; 
             data.forEach(equipo => {
                 listaHTML.innerHTML += `
@@ -259,9 +286,45 @@
                 `;
             });
         }
-
-        // 4. Ejecutamos la función al cargar la página
         cargarEquipos();
+
+        // --- LÓGICA DEL FORMULARIO (MODAL) ---
+        const modal = document.getElementById('modal-inscripcion');
+        const btnAbrir = document.getElementById('btn-abrir-modal');
+        const closeBtn = document.getElementById('cerrar-modal');
+        const formInscripcion = document.getElementById('form-inscripcion');
+        const btnEnviar = document.getElementById('btn-enviar');
+
+        btnAbrir.addEventListener('click', () => { modal.style.display = 'flex'; });
+        closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+        window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+        formInscripcion.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnEnviar.textContent = 'Enviando...';
+            btnEnviar.disabled = true;
+
+            const nuevoEquipo = {
+                team_name: document.getElementById('team_name').value,
+                captain_name: document.getElementById('captain_name').value,
+                contact_info: document.getElementById('contact_info').value,
+                payment_proof: document.getElementById('payment_proof').value,
+                status: 'Pendiente'
+            };
+
+            const { error } = await db.from('teams').insert([nuevoEquipo]);
+
+            if (error) {
+                alert('Error al enviar. Revisa la consola.');
+                console.error(error);
+            } else {
+                alert('¡Inscripción recibida! Tu equipo está pendiente de revisión.');
+                formInscripcion.reset();
+                modal.style.display = 'none';
+            }
+            btnEnviar.textContent = 'Enviar Inscripción';
+            btnEnviar.disabled = false;
+        });
     </script>
 </body>
 </html>
