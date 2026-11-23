@@ -227,7 +227,7 @@
             <div class="payment-info">
                 <strong id="ui-modal-fee">Costo: Cargando...</strong>
                 <div id="ui-modal-payments">Cargando métodos de pago...</div>
-                <br><i>Una vez pagues, sube el enlace de tu captura abajo.</i>
+                <br><i>Una vez pagues, coloca el número de referencia abajo.</i>
             </div>
 
             <form id="form-inscripcion">
@@ -264,8 +264,9 @@
                     <input type="text" id="contact_info" required placeholder="Ej: @miusuario#1234">
                 </div>
                 <div class="form-group">
-                    <label>Enlace del Comprobante de Pago</label>
-                    <input type="url" id="payment_proof" required placeholder="Pega el link de tu captura (Imgur, Drive, etc.)">
+                    <!-- CAMBIO AQUÍ: Ahora pide el número de referencia -->
+                    <label>Número de Referencia del Pago</label>
+                    <input type="text" id="payment_proof" required placeholder="Ej: 123456789">
                 </div>
                 <button type="submit" class="btn-register" id="btn-enviar" style="width: 100%; font-size: 1rem; padding: 12px;">Enviar Inscripción</button>
             </form>
@@ -330,7 +331,6 @@
             btnEnviar.textContent = 'Enviando...';
             btnEnviar.disabled = true;
 
-            // AHORA GUARDAMOS LOS 5 JUGADORES
             const nuevoEquipo = {
                 team_name: document.getElementById('team_name').value,
                 captain_name: document.getElementById('captain_name').value,
@@ -340,7 +340,7 @@
                 player_4: document.getElementById('player_4').value,
                 player_5: document.getElementById('player_5').value,
                 contact_info: document.getElementById('contact_info').value,
-                payment_proof: document.getElementById('payment_proof').value,
+                payment_proof: document.getElementById('payment_proof').value, // Ahora guarda el texto del número
                 status: 'Pendiente'
             };
 
