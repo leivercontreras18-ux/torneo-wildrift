@@ -49,6 +49,7 @@
             font-weight: 700; background: var(--panel-bg);
         }
         .badge.prize { border-color: var(--gold); color: var(--gold); font-size: 1.2rem;}
+        .badge.entry-fee { border-color: var(--cyan); color: var(--cyan); font-size: 1.2rem; }
         
         .btn-primary {
             background: linear-gradient(90deg, var(--cyan), var(--magenta));
@@ -109,7 +110,7 @@
         .legal-links a:hover { color: var(--magenta); }
         .transparency-note { margin-top: 15px; color: #8b949e; font-size: 0.8rem; }
 
-        /* --- ESTILOS DEL MODAL (VENTANA EMERGENTE) --- */
+        /* --- ESTILOS DEL MODAL --- */
         .modal {
             display: none; position: fixed; z-index: 1000; left: 0; top: 0;
             width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);
@@ -120,6 +121,7 @@
             border: 1px solid var(--cyan); border-radius: 10px;
             width: 90%; max-width: 500px; position: relative;
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            max-height: 90vh; overflow-y: auto;
         }
         .close-btn {
             position: absolute; top: 15px; right: 20px;
@@ -136,6 +138,15 @@
             color: #fff; font-family: 'Rajdhani', sans-serif; box-sizing: border-box;
         }
         .form-group input:focus { outline: none; border-color: var(--magenta); }
+
+        /* RECUADRO DE PAGO EN EL MODAL */
+        .payment-info {
+            background-color: rgba(255, 193, 7, 0.1);
+            border: 1px dashed var(--gold);
+            padding: 15px; border-radius: 5px; margin-bottom: 20px;
+            text-align: center; color: var(--gold); font-weight: 500;
+        }
+        .payment-info strong { font-size: 1.2rem; display: block; margin-bottom: 5px; }
 
         @media (max-width: 768px) {
             .main-container { grid-template-columns: 1fr; padding: 15px; }
@@ -166,16 +177,29 @@
         <div class="badges">
             <span class="badge">📅 Fecha por definir</span>
             <span class="badge">⚔️ Formato por definir</span>
+            <span class="badge entry-fee">🎟️ Entrada: $5 USD</span>
             <span class="badge prize">💰 Pozo: Por definir</span>
         </div>
         <button class="btn-primary" id="btn-abrir-modal">Inscribir mi Equipo</button>
     </header>
 
-    <!-- VENTANA EMERGENTE (MODAL) DE INSCRIPCIÓN -->
+    <!-- MODAL DE INSCRIPCIÓN -->
     <div id="modal-inscripcion" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="cerrar-modal">&times;</span>
             <h2>Inscripción de Equipo</h2>
+            
+            <!-- AQUÍ SE LE DICE AL JUGADOR CUANTO Y A DONDE PAGAR -->
+            <div class="payment-info">
+                <strong>Costo de Inscripción: $5 USD (o equivalente)</strong>
+                Realiza tu pago a:<br>
+                🇻🇪 Pago Móvil: 0414-1234567 (V-12345678)<br>
+                💵 Zelle: pagos@torneo.com<br>
+                🪙 Binance Pay: 123456789<br>
+                <br>
+                <i>Una vez pagues, sube el enlace de tu captura abajo.</i>
+            </div>
+
             <form id="form-inscripcion">
                 <div class="form-group">
                     <label for="team_name">Nombre del Equipo</label>
@@ -240,7 +264,7 @@
         </div>
         <div class="rule-box">
             <h3>🏆 Premios</h3>
-            <p>Reparto del pozo:<br>Por definir</p>
+            <p>1er Lugar: Por definir<br>2do Lugar: Por definir</p>
         </div>
     </section>
 
@@ -257,13 +281,12 @@
     </footer>
 
     <script>
-        // --- CONEXIÓN SUPABASE ---
         const SUPABASE_URL = 'https://evlogrwanimynsodcdzu.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_ltDzkQz__8Nt1b68BSs-Sw_2ylQACi1';
         const { createClient } = supabase;
         const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- CARGAR EQUIPOS CONFIRMADOS ---
+        // Cargar Equipos Confirmados
         async function cargarEquipos() {
             const listaHTML = document.getElementById('lista-equipos');
             const { data, error } = await db.from('teams').select('*').eq('status', 'Confirmado');
@@ -288,7 +311,7 @@
         }
         cargarEquipos();
 
-        // --- LÓGICA DEL FORMULARIO (MODAL) ---
+        // Lógica del Modal
         const modal = document.getElementById('modal-inscripcion');
         const btnAbrir = document.getElementById('btn-abrir-modal');
         const closeBtn = document.getElementById('cerrar-modal');
