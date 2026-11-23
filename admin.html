@@ -28,11 +28,9 @@
             background-size: cover; background-position: center; background-attachment: fixed;
         }
 
-        /* Capa oscura y textura */
         .bg-overlay { position: fixed; inset: 0; z-index: 0; background: radial-gradient(circle at center, rgba(5, 8, 15, 0.6) 0%, rgba(5, 8, 15, 0.95) 100%); pointer-events: none; }
         .hex-pattern { position: fixed; inset: 0; z-index: 0; opacity: 0.1; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3C/svg%3E"); }
 
-        /* Botón Volver */
         .btn-back {
             position: absolute; top: 20px; left: 20px; z-index: 10;
             background: rgba(255,255,255,0.05); color: #fff; text-decoration: none;
@@ -170,7 +168,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th><th>Equipo</th><th>Capitán</th><th>Jugadores (Riot IDs)</th><th>Contacto</th><th>Comprobante</th><th>Acción</th>
+                            <th>ID</th><th>Equipo</th><th>Capitán</th><th>Jugadores (Riot IDs)</th><th>Contacto</th><th>N° Referencia</th><th>Acción</th>
                         </tr>
                     </thead>
                     <tbody id="tabla-equipos"></tbody>
@@ -189,7 +187,6 @@
         const loginSection = document.getElementById('login-section');
         const dashboard = document.getElementById('dashboard');
 
-        // 1. Login
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-login');
@@ -202,13 +199,11 @@
             else { mostrarDashboard(); btn.textContent = 'Iniciar Sesión'; }
         });
 
-        // 2. Logout
         document.getElementById('btn-logout').addEventListener('click', async () => {
             await db.auth.signOut();
             location.reload();
         });
 
-        // 3. Verificar sesión
         async function checkSession() {
             const { data: { session } } = await db.auth.getSession();
             if (session) mostrarDashboard();
@@ -221,7 +216,6 @@
             cargarEquiposPendientes();
         }
 
-        // 4. Cargar Configuración
         async function cargarConfiguracion() {
             const { data, error } = await db.from('settings').select('*').eq('id', 1).single();
             if (data) {
@@ -231,7 +225,6 @@
             }
         }
 
-        // 5. Guardar Configuración
         document.getElementById('btn-save-settings').addEventListener('click', async () => {
             const btn = document.getElementById('btn-save-settings');
             btn.textContent = 'Guardando...';
@@ -246,7 +239,6 @@
             btn.textContent = 'Guardar Configuración';
         });
 
-        // 6. Cargar Equipos Pendientes (AHORA CON LOS 5 JUGADORES)
         async function cargarEquiposPendientes() {
             const { data, error } = await db.from('teams').select('*').eq('status', 'Pendiente');
             if (error) return;
@@ -270,14 +262,14 @@
                         5: ${equipo.player_5 || '-'}
                     </td>
                     <td>${equipo.contact_info}</td>
-                    <td><a href="${equipo.payment_proof}" target="_blank" style="color:var(--cyan);">Ver Captura</a></td>
+                    <!-- CAMBIO AQUÍ: Ahora muestra el número en texto directo -->
+                    <td style="font-weight:bold; color:var(--cyan);">${equipo.payment_proof}</td>
                     <td><button class="btn-approve" onclick="aprobarEquipo(${equipo.id})">Aprobar</button></td>
                 `;
                 tablaEquipos.appendChild(fila);
             });
         }
 
-        // 7. Aprobar Equipo
         window.aprobarEquipo = async function(id) {
             if (!confirm('¿Aprobar este equipo? Aparecerá en la web pública.')) return;
             const { error } = await db.from('teams').update({ status: 'Confirmado' }).eq('id', id);
