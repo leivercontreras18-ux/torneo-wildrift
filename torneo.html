@@ -99,7 +99,7 @@
 
         /* --- MODAL --- */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .modal-content { background: rgba(13, 20, 33, 0.95); padding: 30px; border: 1px solid var(--cyan); border-radius: 10px; width: 90%; max-width: 500px; position: relative; box-shadow: 0 0 30px rgba(0, 229, 255, 0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: rgba(13, 20, 33, 0.95); padding: 30px; border: 1px solid var(--cyan); border-radius: 10px; width: 90%; max-width: 600px; position: relative; box-shadow: 0 0 30px rgba(0, 229, 255, 0.2); max-height: 90vh; overflow-y: auto; }
         .close-btn { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 28px; font-weight: bold; cursor: pointer; }
         .close-btn:hover { color: var(--magenta); }
         .modal-content h2 { font-family: 'Orbitron', sans-serif; color: var(--cyan); margin-top: 0; text-align: center; margin-bottom: 20px; }
@@ -108,6 +108,9 @@
         .form-group label { display: block; font-weight: 700; margin-bottom: 5px; color: #fff; font-size: 0.9rem; }
         .form-group input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #30363d; background-color: rgba(0,0,0,0.5); color: #fff; font-family: 'Rajdhani', sans-serif; }
         .form-group input:focus { outline: none; border-color: var(--magenta); }
+        
+        .players-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .players-grid .form-group:last-child { grid-column: span 2; }
         
         .payment-info { background-color: rgba(255, 193, 7, 0.1); border: 1px dashed var(--gold); padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center; color: var(--gold); font-weight: 500; font-size: 0.9rem; }
         .payment-info strong { font-size: 1.1rem; display: block; margin-bottom: 5px; }
@@ -118,6 +121,8 @@
             .hero h1 { font-size: 2.5rem; }
             .nav-links { display: none; }
             .bracket-container { display: none; }
+            .players-grid { grid-template-columns: 1fr; }
+            .players-grid .form-group:last-child { grid-column: span 1; }
         }
     </style>
 </head>
@@ -234,6 +239,26 @@
                     <label>Nombre del Capitán</label>
                     <input type="text" id="captain_name" required placeholder="Tu nombre o nick">
                 </div>
+                
+                <label style="color: var(--cyan); font-weight: 700; margin-bottom: 5px; display: block;">Riot IDs de los 5 Jugadores</label>
+                <div class="players-grid">
+                    <div class="form-group">
+                        <input type="text" id="player_1" required placeholder="Jugador 1 (Top)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="player_2" required placeholder="Jugador 2 (Jungla)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="player_3" required placeholder="Jugador 3 (Mid)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="player_4" required placeholder="Jugador 4 (ADC)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="player_5" required placeholder="Jugador 5 (Support)">
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label>Discord o WhatsApp</label>
                     <input type="text" id="contact_info" required placeholder="Ej: @miusuario#1234">
@@ -305,9 +330,15 @@
             btnEnviar.textContent = 'Enviando...';
             btnEnviar.disabled = true;
 
+            // AHORA GUARDAMOS LOS 5 JUGADORES
             const nuevoEquipo = {
                 team_name: document.getElementById('team_name').value,
                 captain_name: document.getElementById('captain_name').value,
+                player_1: document.getElementById('player_1').value,
+                player_2: document.getElementById('player_2').value,
+                player_3: document.getElementById('player_3').value,
+                player_4: document.getElementById('player_4').value,
+                player_5: document.getElementById('player_5').value,
                 contact_info: document.getElementById('contact_info').value,
                 payment_proof: document.getElementById('payment_proof').value,
                 status: 'Pendiente'
