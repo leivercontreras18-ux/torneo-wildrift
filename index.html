@@ -3,73 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Torneo Wild Rift | Arena Online</title>
+    <title>Arena Wild Rift #1 | Torneo Oficial</title>
+    <!-- Importamos una fuente estilo gamer desde Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilos básicos con estética oscura */
+        /* --- ESTILOS GLOBALES Y TRANSPARENCIA --- */
+        :root {
+            --bg-color: #0d1117;       /* Fondo oscuro */
+            --panel-bg: #161b22;       /* Fondo de paneles */
+            --text-main: #c9d1d9;      /* Texto claro */
+            --cyan: #00e5ff;           /* Neón Cyan */
+            --magenta: #ff007f;        /* Neón Magenta */
+            --gold: #ffc107;           /* Dorado premios */
+            --green: #00e676;          /* Estado confirmado */
+            --yellow: #ffab00;         /* Estado pendiente */
+        }
+
         body {
-            background-color: #0a0a0a;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Rajdhani', sans-serif;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
+
+        /* --- BARRA DE NAVEGACIÓN --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(13, 17, 23, 0.9);
+            border-bottom: 1px solid #30363d;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-weight: 700; font-size: 1.5rem; color: #fff; display: flex; align-items: center; gap: 10px;}
+        .logo span { color: var(--magenta); }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 500; font-size: 1.1rem; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--cyan); border-bottom: 2px solid var(--cyan); }
+        .nav-icons { display: flex; gap: 15px; font-size: 1.2rem; cursor: pointer; }
+
+        /* --- HERO SECTION --- */
         .hero {
             text-align: center;
             padding: 60px 20px;
-            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a0a 100%);
-            border-bottom: 2px solid #00d2ff;
+            background: radial-gradient(circle at center, #1a1a2e 0%, var(--bg-color) 100%);
+            border-bottom: 1px solid #30363d;
         }
         .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
+            font-size: 4rem;
+            margin: 0 0 15px 0;
+            background: linear-gradient(90deg, var(--cyan), var(--magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #00d2ff;
         }
-        .info-torneo {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
-            font-size: 1.2rem;
+        .badges { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;}
+        .badge {
+            border: 1px solid #30363d;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            background: var(--panel-bg);
         }
-        .premio {
-            font-size: 2rem;
-            color: #ffd700;
-            font-weight: bold;
-            margin: 20px 0;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-        .btn-inscripcion {
-            background-color: #00d2ff;
-            color: #000;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
+        .badge.prize { border-color: var(--gold); color: var(--gold); font-size: 1.2rem;}
+        
+        .btn-primary {
+            background: linear-gradient(90deg, var(--cyan), var(--magenta));
+            color: #fff;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-weight: 700;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: 0.3s;
             text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
         }
-        .btn-inscripcion:hover {
-            background-color: #fff;
-            box-shadow: 0 0 15px #00d2ff;
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--cyan); }
+
+        /* --- PANEL PRINCIPAL (BRACKET Y EQUIPOS) --- */
+        .main-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .panel {
+            background-color: var(--panel-bg);
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .panel h2 { margin-top: 0; font-size: 1.5rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+
+        /* Simulación visual del Bracket */
+        .bracket {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+        .round { display: flex; flex-direction: column; justify-content: space-around; width: 30%; }
+        .round-title { font-weight: 700; color: var(--cyan); margin-bottom: 15px;}
+        .matchup {
+            background: #21262d;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-weight: 500;
+            border-left: 3px solid var(--magenta);
+        }
+
+        /* Lista de Equipos */
+        .team-list { display: flex; flex-direction: column; gap: 10px; }
+        .team-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #21262d;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .status { font-size: 0.8rem; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
+        .status.confirmed { background: rgba(0, 230, 118, 0.2); color: var(--green); border: 1px solid var(--green);}
+        .status.pending { background: rgba(255, 171, 0, 0.2); color: var(--yellow); border: 1px solid var(--yellow);}
+
+        /* --- SECCIÓN REGLAS Y PREMIOS --- */
+        .rules-section {
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 20px;
+            background: var(--panel-bg);
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+        .rule-box { flex: 1; padding: 10px; border-right: 1px solid #30363d; }
+        .rule-box:last-child { border-right: none; }
+        .rule-box h3 { color: var(--cyan); margin-bottom: 5px; }
+
+        /* --- FOOTER LEGAL (TRANSPARENCIA) --- */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #090c10;
+            border-top: 1px solid #30363d;
+            font-size: 0.9rem;
+        }
+        .legal-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: 0.3s;
+        }
+        .legal-links a:hover { color: var(--magenta); }
+        .transparency-note { margin-top: 15px; color: #8b949e; font-size: 0.8rem; }
+
+        /* --- RESPONSIVE (PARA CELULARES) --- */
+        @media (max-width: 768px) {
+            .main-container { grid-template-columns: 1fr; padding: 15px; }
+            .nav-links { display: none; } /* Se oculta el menú en móvil para que no se vea amontonado */
+            .hero h1 { font-size: 2.5rem; }
+            .rules-section { flex-direction: column; gap: 20px; }
+            .rule-box { border-right: none; border-bottom: 1px solid #30363d; padding-bottom: 15px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- BARRA DE NAVEGACIÓN -->
+    <nav>
+        <div class="logo">🛡️ ARENA <span>WILDRIFT</span></div>
+        <div class="nav-links">
+            <a href="#" class="active">Inicio</a>
+            <a href="#">Torneos</a>
+            <a href="#">Equipos</a>
+            <a href="#">Clasificación</a>
+        </div>
+        <div class="nav-icons">
+            <span title="Perfil de Jugador">👤</span>
+            <!-- Este icono luego nos llevará al panel de administrador -->
+            <span title="Panel de Organizador">👥</span>
+        </div>
+    </nav>
+
+    <!-- PORTADA PRINCIPAL (HERO) -->
     <header class="hero">
         <h1>Arena Wild Rift #1</h1>
-        <div class="info-torneo">
-            <span>📅 15 de Noviembre</span>
-            <span>⚔️ 5v5 - Eliminación Directa</span>
-            <span>🖥️ 100% Online</span>
+        <div class="badges">
+            <span class="badge">📅 15 de Noviembre</span>
+            <span class="badge">⚔️ 5v5 - Eliminación Directa</span>
+            <span class="badge prize">💰 Pozo: $100 USD</span>
         </div>
-        <div class="premio">💰 Pozo: $100 USD</div>
-        <button class="btn-inscripcion">Inscribir mi Equipo</button>
+        <button class="btn-primary">Inscribir mi Equipo</button>
     </header>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="main-container">
+        
+        <!-- SECCIÓN DEL BRACKET -->
+        <section class="panel">
+            <h2>Soporte del Torneo (Bracket)</h2>
+            <div class="bracket">
+                <div class="round">
+                    <div class="round-title">Cuartos de Final</div>
+                    <div class="matchup">Team A vs Team B</div>
+                    <div class="matchup">Team C vs Team D</div>
+                    <div class="matchup">Team E vs Team F</div>
+                    <div class="matchup">Team G vs Team H</div>
+                </div>
+                <div class="round">
+                    <div class="round-title">Semifinales</div>
+                    <div class="matchup">Ganador A/B vs C/D</div>
+                    <div class="matchup">Ganador E/F vs G/H</div>
+                </div>
+                <div class="round">
+                    <div class="round-title">Gran Final</div>
+                    <div class="matchup" style="border-left-color: var(--gold);">Por definir</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE EQUIPOS -->
+        <aside class="panel">
+            <h2>Equipos Inscritos</h2>
+            <div class="team-list">
+                <div class="team-item">
+                    <span>🛡️ Alpha Squad</span>
+                    <span class="status confirmed">Confirmado</span>
+                </div>
+                <div class="team-item">
+                    <span>⚡ Nova Esports</span>
+                    <span class="status confirmed">Confirmado</span>
+                </div>
+                <div class="team-item">
+                    <span>🔥 Velocity</span>
+                    <span class="status confirmed">Confirmado</span>
+                </div>
+                <div class="team-item">
+                    <span>🐉 Crimson Fury</span>
+                    <span class="status pending">Pendiente</span>
+                </div>
+                <div class="team-item">
+                    <span>🌪️ Zenith Gaming</span>
+                    <span class="status pending">Pendiente</span>
+                </div>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- SECCIÓN DE REGLAS Y PREMIOS -->
+    <section class="rules-section">
+        <div class="rule-box">
+            <h3>⚖️ Reglamento</h3>
+            <p>+18 Años<br>Juego Limpio<br>Respeto en el Chat</p>
+        </div>
+        <div class="rule-box">
+            <h3>🗺️ Mapa</h3>
+            <p>Wild Rift<br>Modo Torneo<br>Salas Privadas</p>
+        </div>
+        <div class="rule-box">
+            <h3>🏆 Premios</h3>
+            <p>1er Lugar: $100 USD + Rango<br>2do Lugar: $50 USD</p>
+        </div>
+    </section>
+
+    <!-- FOOTER LEGAL Y TRANSPARENCIA -->
+    <footer>
+        <div class="legal-links">
+            <a href="#">Términos y Condiciones</a> | 
+            <a href="#">Política de Privacidad</a> | 
+            <a href="#">Reglas Completas del Torneo</a>
+        </div>
+        <div class="transparency-note">
+            Arena Wild Rift es un proyecto transparente. Los pagos de inscripción van directamente al pozo de premios y operaciones del torneo.<br>
+            &copy; 2024 Equipo Win. Todos los derechos reservados.
+        </div>
+    </footer>
 
 </body>
 </html>
