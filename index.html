@@ -40,7 +40,7 @@
 
     .hex-pattern {
       position: fixed; inset: 0; z-index: 0; opacity: 0.1; pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3Cpath d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='%23e600ff' stroke-width='0.6'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3C/svg%3E");
     }
 
     header { position: relative; z-index: 2; padding: 24px 36px; }
@@ -58,7 +58,7 @@
 
     .logo-img-container {
       width: 500px;
-      max-width: 95vw;
+      max-width: 90vw; /* Adaptación móvil */
       margin-bottom: 30px;
       animation: flotar 4s ease-in-out infinite;
     }
@@ -75,11 +75,11 @@
       100% { transform: translateY(0px); }
     }
 
-    .actions { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 380px; }
+    .actions { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 380px; padding: 0 15px;}
 
     .btn-esports {
       position: relative; display: inline-flex; align-items: center; justify-content: center;
-      height: 58px; font-family: 'Rajdhani', sans-serif; font-size: 1.25rem; font-weight: 700;
+      height: 58px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700;
       letter-spacing: 2px; text-transform: uppercase; text-decoration: none; cursor: pointer;
       border: none; transition: all 0.25s ease;
       clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
@@ -105,6 +105,14 @@
     }
     footer a { color: inherit; text-decoration: none; margin: 0 8px; transition: color 0.2s ease; }
     footer a:hover { color: var(--cyan-neon); }
+
+    /* --- MEDIA QUERIES PARA MÓVIL --- */
+    @media (max-width: 768px) {
+      header { padding: 15px 20px; text-align: center; }
+      .logo-img-container { width: 350px; margin-bottom: 20px; }
+      .actions { gap: 15px; }
+      .btn-esports { height: 50px; font-size: 1rem; }
+    }
   </style>
 </head>
 <body>
