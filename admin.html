@@ -30,29 +30,14 @@
         .bg-overlay { position: fixed; inset: 0; z-index: 0; background: rgba(5, 8, 15, 0.85); pointer-events: none; }
         .hex-pattern { position: fixed; inset: 0; z-index: 0; opacity: 0.1; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3C/svg%3E"); }
 
-        /* --- BOTÓN VOLVER (Siempre visible) --- */
+        /* --- BOTÓN VOLVER --- */
         .btn-back {
-            position: fixed; top: 15px; right: 15px; z-index: 2000;
+            position: fixed; top: 15px; right: 15px; z-index: 3000;
             background: rgba(13, 20, 33, 0.8); color: #fff; text-decoration: none;
             padding: 6px 12px; border-radius: 5px; font-weight: 600; font-size: 0.8rem;
             border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; backdrop-filter: blur(10px);
         }
         .btn-back:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); color: var(--cyan); }
-
-        /* --- BOTÓN MENÚ (Solo dentro del Dashboard) --- */
-        .mobile-menu-btn {
-            display: none; 
-            position: fixed; top: 15px; left: 15px; z-index: 2000;
-            background: rgba(13, 20, 33, 0.9); color: var(--cyan); border: 1px solid var(--cyan);
-            padding: 6px 12px; border-radius: 5px; font-size: 1.1rem; cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .mobile-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-            z-index: 1500; opacity: 0; transition: opacity 0.3s ease;
-        }
-        .mobile-overlay.active { display: block; opacity: 1; }
 
         /* --- LOGIN --- */
         #login-section { position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 20px;}
@@ -66,14 +51,21 @@
         .btn-esports { display: inline-flex; align-items: center; justify-content: center; padding: 12px; width: 100%; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border: none; transition: all 0.25s ease; color: #fff; background: linear-gradient(90deg, var(--cyan), var(--magenta)); box-shadow: 0 0 20px rgba(255, 0, 127, 0.4); clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px); }
         
         /* --- DASHBOARD --- */
-        #dashboard { display: none; height: 100vh; overflow: hidden; position: relative; z-index: 2; }
+        #dashboard { display: none; height: 100vh; overflow: hidden; position: relative; z-index: 100; /* Aumentado para estar por encima del fondo */ }
         .layout-wrapper { display: flex; height: 100%; }
+
+        /* Overlay para móvil movido aquí */
+        .mobile-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            z-index: 900; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .mobile-overlay.active { display: block; opacity: 1; }
 
         .sidebar { 
             width: var(--sidebar-width); background: #05080f; 
             border-right: 1px solid rgba(255,255,255,0.1); 
             display: flex; flex-direction: column; transition: all 0.3s ease; 
-            position: relative; z-index: 1600; 
+            position: relative; z-index: 1000; 
         }
         .sidebar.collapsed { width: 80px; }
         .sidebar.collapsed .nav-text, .sidebar.collapsed .brand-text { display: none; }
@@ -82,7 +74,16 @@
         .brand-text { font-family: 'Orbitron', sans-serif; font-weight: 900; color: #fff; font-size: 1.1rem; }
         
         .nav-menu { padding: 20px 0; flex: 1; overflow-y: auto; }
-        .nav-item { display: flex; align-items: center; gap: 15px; padding: 15px 25px; color: #a0aec0; text-decoration: none; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; border-left: 3px solid transparent; white-space: nowrap; pointer-events: auto;}
+        .nav-item { 
+            display: flex; align-items: center; gap: 15px; padding: 15px 25px; 
+            color: #a0aec0; text-decoration: none; font-weight: 700; font-size: 1rem; 
+            cursor: pointer; transition: 0.3s; border-left: 3px solid transparent; 
+            white-space: nowrap; 
+            /* Propiedades para asegurar el clic en móviles */
+            pointer-events: auto !important; 
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active { background: rgba(0, 229, 255, 0.1); color: var(--cyan); border-left-color: var(--cyan); box-shadow: inset 5px 0 15px rgba(0,229,255,0.1); }
         .nav-icon { font-size: 1.2rem; }
@@ -130,25 +131,31 @@
 
         /* --- MEDIA QUERIES MÓVIL --- */
         @media (max-width: 768px) {
-            .mobile-menu-btn { display: block; } 
+            .mobile-menu-btn { 
+                display: block !important; 
+                position: fixed; top: 15px; left: 15px; z-index: 1001;
+                background: rgba(13, 20, 33, 0.9); color: var(--cyan); border: 1px solid var(--cyan);
+                padding: 6px 12px; border-radius: 5px; font-size: 1.1rem; cursor: pointer;
+                transition: 0.3s;
+            }
             
             .sidebar { 
-                position: fixed; top: 0; left: 0; height: 100vh; 
+                position: fixed; top: 0; left: 0; height: 100vh; width: 260px;
                 transform: translateX(-100%); 
                 background: #0d1421 !important;
                 box-shadow: 5px 0 20px rgba(0,0,0,0.8);
-                pointer-events: none;
+                pointer-events: none; /* Desactivado cuando está oculto */
+                z-index: 1000;
             }
             .sidebar.mobile-active { 
                 transform: translateX(0); 
-                pointer-events: auto;
+                pointer-events: auto; /* Activado cuando se abre */
             }
             
             .sidebar-header { padding-top: 60px; } 
             .settings-grid, .payment-methods-grid { grid-template-columns: 1fr; }
             .main-content { padding: 70px 15px 30px 15px; } 
             
-            /* BAJAMOS LA NOTIFICACIÓN PARA QUE NO TAPE LOS BOTONES */
             .toast-container { top: 70px; right: 15px; }
         }
     </style>
@@ -159,11 +166,7 @@
     <div class="hex-pattern"></div>
     <div class="toast-container" id="toast-container"></div>
 
-    <!-- Botón Volver (Siempre visible) -->
     <a href="index.html" class="btn-back">← Portada</a>
-
-    <!-- Capa oscura para cerrar menú móvil -->
-    <div class="mobile-overlay" id="mobile-overlay"></div>
 
     <!-- LOGIN -->
     <div id="login-section">
@@ -185,9 +188,13 @@
 
     <!-- PANEL DE CONTROL -->
     <div id="dashboard">
-        <!-- BOTÓN DE MENÚ MOVIDO AQUÍ ADENTRO -->
-        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
         
+        <!-- BOTÓN DE MENÚ (Solo visible en móvil) -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn" type="button">☰</button>
+        
+        <!-- CAPA OSCURA (Movida aquí para que no bloquee la barra) -->
+        <div class="mobile-overlay" id="mobile-overlay"></div>
+
         <div class="layout-wrapper">
             
             <!-- SIDEBAR -->
@@ -197,21 +204,21 @@
                 </div>
                 
                 <div class="nav-menu">
-                    <a class="nav-item active" data-target="view-dashboard">
+                    <div class="nav-item active" data-target="view-dashboard">
                         <span class="nav-icon">📊</span> <span class="nav-text">Dashboard</span>
-                    </a>
-                    <a class="nav-item" data-target="view-config">
+                    </div>
+                    <div class="nav-item" data-target="view-config">
                         <span class="nav-icon">⚙️</span> <span class="nav-text">Configuración</span>
-                    </a>
-                    <a class="nav-item" data-target="view-pagos">
+                    </div>
+                    <div class="nav-item" data-target="view-pagos">
                         <span class="nav-icon">💳</span> <span class="nav-text">Métodos de Pago</span>
-                    </a>
-                    <a class="nav-item" data-target="view-pendientes">
+                    </div>
+                    <div class="nav-item" data-target="view-pendientes">
                         <span class="nav-icon">⏳</span> <span class="nav-text">Equipos Pendientes</span>
-                    </a>
-                    <a class="nav-item" data-target="view-confirmados">
+                    </div>
+                    <div class="nav-item" data-target="view-confirmados">
                         <span class="nav-icon">✅</span> <span class="nav-text">Equipos Confirmados</span>
-                    </a>
+                    </div>
                 </div>
                 
                 <div class="sidebar-footer">
