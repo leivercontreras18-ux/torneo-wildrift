@@ -30,14 +30,31 @@
         .bg-overlay { position: fixed; inset: 0; z-index: 0; background: rgba(5, 8, 15, 0.85); pointer-events: none; }
         .hex-pattern { position: fixed; inset: 0; z-index: 0; opacity: 0.1; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3C/svg%3E"); }
 
+        /* --- BOTONES FLOTANTES (Móvil y Portada) --- */
         .btn-back {
-            position: fixed; top: 20px; left: 20px; z-index: 999;
+            position: fixed; top: 20px; right: 20px; z-index: 999;
             background: rgba(13, 20, 33, 0.8); color: #fff; text-decoration: none;
-            padding: 8px 20px; border-radius: 5px; font-weight: 600; font-size: 0.9rem;
+            padding: 8px 15px; border-radius: 5px; font-weight: 600; font-size: 0.85rem;
             border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; backdrop-filter: blur(10px);
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 5px;
         }
-        .btn-back:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); }
+        .btn-back:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); color: var(--cyan); }
+
+        .mobile-menu-btn {
+            display: none; /* Oculto en PC */
+            position: fixed; top: 20px; left: 20px; z-index: 1001;
+            background: rgba(13, 20, 33, 0.8); color: var(--cyan); border: 1px solid var(--cyan);
+            padding: 8px 12px; border-radius: 5px; font-size: 1.2rem; cursor: pointer;
+            backdrop-filter: blur(10px); transition: 0.3s;
+        }
+        .mobile-menu-btn:hover { background: rgba(0, 229, 255, 0.2); }
+
+        /* Capa oscura para cerrar menú en móvil */
+        .mobile-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            z-index: 999; backdrop-filter: blur(3px); opacity: 0; transition: opacity 0.3s ease;
+        }
+        .mobile-overlay.active { display: block; opacity: 1; }
 
         /* --- LOGIN --- */
         #login-section { position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 20px;}
@@ -45,7 +62,6 @@
         .login-container h1 { font-family: 'Orbitron', sans-serif; color: var(--cyan); margin-top: 0; margin-bottom: 20px; font-size: 1.8rem;}
         .input-group { margin-bottom: 20px; text-align: left; }
         .input-group label { display: block; margin-bottom: 5px; font-weight: 700; }
-        /* Fuente 16px evita zoom en móvil */
         .input-group input { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #30363d; background-color: rgba(0,0,0,0.5); color: #fff; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; font-size: 16px;}
         .input-group input:focus { outline: none; border-color: var(--magenta); }
         
@@ -56,11 +72,16 @@
         #dashboard { display: none; height: 100vh; overflow: hidden; position: relative; z-index: 2; }
         .layout-wrapper { display: flex; height: 100%; }
 
-        .sidebar { width: var(--sidebar-width); background: rgba(5, 8, 15, 0.95); border-right: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); display: flex; flex-direction: column; transition: all 0.3s ease; position: relative; z-index: 100;}
+        .sidebar { 
+            width: var(--sidebar-width); background: rgba(5, 8, 15, 0.95); 
+            border-right: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); 
+            display: flex; flex-direction: column; transition: all 0.3s ease; 
+            position: relative; z-index: 1000;
+        }
         .sidebar.collapsed { width: 80px; }
         .sidebar.collapsed .nav-text, .sidebar.collapsed .brand-text { display: none; }
 
-        .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-top: 60px; /* Espacio para botón volver */ }
+        .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .menu-toggle { cursor: pointer; font-size: 1.5rem; color: var(--cyan); }
         .brand-text { font-family: 'Orbitron', sans-serif; font-weight: 900; color: #fff; font-size: 1.1rem; }
         
@@ -75,7 +96,7 @@
         .btn-logout:hover { background: #f85149; }
 
         /* Main Content */
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; padding-top: 70px; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
         
         .content-section { display: none; animation: fadeIn 0.4s ease; }
         .content-section.active { display: block; }
@@ -97,9 +118,9 @@
         .binance-box { background: rgba(255, 0, 127, 0.05); border: 1px solid var(--magenta); border-radius: 8px; padding: 20px; box-shadow: 0 0 15px rgba(255,0,127,0.1); }
         .binance-box h3 { color: var(--magenta); font-family: 'Orbitron', sans-serif; text-align: center; margin-bottom: 15px; font-size: 1.1rem;}
 
-        /* Tablas (Scroll en móvil) */
+        /* Tablas */
         .table-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; /* Fuerza scroll en móvil */ }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
         th, td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         th { color: var(--cyan); font-family: 'Orbitron', sans-serif; font-size: 0.85rem; text-transform: uppercase; background: rgba(0,0,0,0.3);}
         tr:hover { background: rgba(255,255,255,0.02); }
@@ -114,13 +135,23 @@
         .toast.error { border-left-color: #da3633; border-color: rgba(218, 54, 51, 0.2); }
         .toast.success { border-left-color: var(--green); border-color: rgba(0, 230, 118, 0.2); }
 
+        /* --- MEDIA QUERIES MÓVIL --- */
         @media (max-width: 768px) {
-            .sidebar { position: absolute; height: 100%; z-index: 100; transform: translateX(-100%); }
-            .sidebar.mobile-active { transform: translateX(0); }
+            .mobile-menu-btn { display: block; } /* Mostramos botón flotante */
+            .btn-back { top: 20px; right: 20px; padding: 8px 12px; font-size: 0.8rem;}
+            
+            .sidebar { 
+                position: fixed; top: 0; left: 0; height: 100vh; 
+                transform: translateX(-100%); /* Oculto a la izquierda */
+            }
+            .sidebar.mobile-active { transform: translateX(0); /* Se muestra */ }
+            
+            /* Ocultamos el botón hamburguesa de adentro de la barra porque ya tenemos el flotante */
+            .sidebar-header .menu-toggle { display: none; } 
+            .sidebar-header { padding-top: 70px; } /* Damos espacio para el botón flotante */
+
             .settings-grid, .payment-methods-grid { grid-template-columns: 1fr; }
-            .main-content { padding-top: 70px; padding-left: 15px; padding-right: 15px; }
-            .btn-back { top: 20px; left: auto; right: 20px; padding: 6px 12px; font-size: 0.8rem;} 
-            .sidebar-header { padding-top: 20px; } /* Reset padding */
+            .main-content { padding: 70px 15px 30px 15px; }
         }
     </style>
 </head>
@@ -130,7 +161,12 @@
     <div class="hex-pattern"></div>
     <div class="toast-container" id="toast-container"></div>
 
+    <!-- BOTONES FLOTANTES -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
     <a href="index.html" class="btn-back">← Portada</a>
+
+    <!-- Capa oscura para cerrar menú móvil -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
 
     <!-- LOGIN -->
     <div id="login-section">
@@ -157,7 +193,6 @@
             <!-- SIDEBAR -->
             <div class="sidebar" id="sidebar">
                 <div class="sidebar-header">
-                    <div class="menu-toggle" id="menu-toggle">☰</div>
                     <div class="brand-text">WRT ADMIN</div>
                 </div>
                 
@@ -305,6 +340,21 @@
         const loginSection = document.getElementById('login-section');
         const dashboard = document.getElementById('dashboard');
 
+        // --- LÓGICA DEL MENÚ MÓVIL ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const sidebar = document.getElementById('sidebar');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.add('mobile-active');
+            mobileOverlay.classList.add('active');
+        });
+
+        mobileOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('mobile-active');
+            mobileOverlay.classList.remove('active');
+        });
+
         // --- LÓGICA DE NAVEGACIÓN ---
         const navItems = document.querySelectorAll('.nav-item');
         const sections = document.querySelectorAll('.content-section');
@@ -320,18 +370,10 @@
                 
                 // En móvil, cerramos el menú al hacer clic en una opción
                 if (window.innerWidth <= 768) {
-                    document.getElementById('sidebar').classList.remove('mobile-active');
+                    sidebar.classList.remove('mobile-active');
+                    mobileOverlay.classList.remove('active');
                 }
             });
-        });
-
-        document.getElementById('menu-toggle').addEventListener('click', () => {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle('mobile-active');
-            } else {
-                sidebar.classList.toggle('collapsed');
-            }
         });
 
         function mostrarNotificacion(mensaje, tipo = 'success') {
