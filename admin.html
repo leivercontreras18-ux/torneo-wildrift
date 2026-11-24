@@ -32,24 +32,23 @@
 
         /* --- BOTONES FLOTANTES --- */
         .btn-back {
-            position: fixed; top: 15px; right: 15px; z-index: 1003;
+            position: fixed; top: 15px; right: 15px; z-index: 2000;
             background: rgba(13, 20, 33, 0.8); color: #fff; text-decoration: none;
             padding: 6px 12px; border-radius: 5px; font-weight: 600; font-size: 0.8rem;
             border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; backdrop-filter: blur(10px);
         }
-        .btn-back:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); color: var(--cyan); }
 
         .mobile-menu-btn {
             display: none; 
-            position: fixed; top: 15px; left: 15px; z-index: 1003;
-            background: rgba(13, 20, 33, 0.8); color: var(--cyan); border: 1px solid var(--cyan);
+            position: fixed; top: 15px; left: 15px; z-index: 2000;
+            background: rgba(13, 20, 33, 0.9); color: var(--cyan); border: 1px solid var(--cyan);
             padding: 6px 12px; border-radius: 5px; font-size: 1.1rem; cursor: pointer;
-            backdrop-filter: blur(10px); transition: 0.3s;
+            transition: 0.3s;
         }
 
         .mobile-overlay {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-            z-index: 1001; backdrop-filter: blur(3px); opacity: 0; transition: opacity 0.3s ease;
+            z-index: 1500; opacity: 0; transition: opacity 0.3s ease;
         }
         .mobile-overlay.active { display: block; opacity: 1; }
 
@@ -63,17 +62,16 @@
         .input-group input:focus { outline: none; border-color: var(--magenta); }
         
         .btn-esports { display: inline-flex; align-items: center; justify-content: center; padding: 12px; width: 100%; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border: none; transition: all 0.25s ease; color: #fff; background: linear-gradient(90deg, var(--cyan), var(--magenta)); box-shadow: 0 0 20px rgba(255, 0, 127, 0.4); clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px); }
-        .btn-esports:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0, 229, 255, 0.6); }
-
+        
         /* --- DASHBOARD --- */
         #dashboard { display: none; height: 100vh; overflow: hidden; position: relative; z-index: 2; }
         .layout-wrapper { display: flex; height: 100%; }
 
         .sidebar { 
-            width: var(--sidebar-width); background: #05080f; /* Fondo sólido para PC */
+            width: var(--sidebar-width); background: #05080f; 
             border-right: 1px solid rgba(255,255,255,0.1); 
             display: flex; flex-direction: column; transition: all 0.3s ease; 
-            position: relative; z-index: 1002;
+            position: relative; z-index: 1600; /* Por encima del overlay */
         }
         .sidebar.collapsed { width: 80px; }
         .sidebar.collapsed .nav-text, .sidebar.collapsed .brand-text { display: none; }
@@ -83,14 +81,13 @@
         .brand-text { font-family: 'Orbitron', sans-serif; font-weight: 900; color: #fff; font-size: 1.1rem; }
         
         .nav-menu { padding: 20px 0; flex: 1; overflow-y: auto; }
-        .nav-item { display: flex; align-items: center; gap: 15px; padding: 15px 25px; color: #a0aec0; text-decoration: none; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; border-left: 3px solid transparent; white-space: nowrap;}
+        .nav-item { display: flex; align-items: center; gap: 15px; padding: 15px 25px; color: #a0aec0; text-decoration: none; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; border-left: 3px solid transparent; white-space: nowrap; pointer-events: auto;}
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active { background: rgba(0, 229, 255, 0.1); color: var(--cyan); border-left-color: var(--cyan); box-shadow: inset 5px 0 15px rgba(0,229,255,0.1); }
         .nav-icon { font-size: 1.2rem; }
         
         .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
         .btn-logout { background: #da3633; color: white; padding: 10px; width: 100%; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-logout:hover { background: #f85149; }
 
         /* Main Content */
         .main-content { flex: 1; padding: 30px; overflow-y: auto; position: relative; z-index: 1; }
@@ -120,34 +117,34 @@
         table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
         th, td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         th { color: var(--cyan); font-family: 'Orbitron', sans-serif; font-size: 0.85rem; text-transform: uppercase; background: rgba(0,0,0,0.3);}
-        tr:hover { background: rgba(255,255,255,0.02); }
         
-        .btn-approve { background-color: var(--green); color: #000; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: 700; transition: 0.3s; }
-        .btn-approve:hover { background-color: #00c853; box-shadow: 0 0 10px rgba(0,230,118,0.5); }
+        .btn-approve { background-color: var(--green); color: #000; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: 700; }
 
         /* --- NOTIFICACIÓN TOAST --- */
         .toast-container { position: fixed; top: 15px; right: 15px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: calc(100% - 30px); max-width: 350px;}
-        .toast { background: rgba(13, 20, 33, 0.95); backdrop-filter: blur(10px); border-left: 4px solid var(--cyan); padding: 15px 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); color: #fff; font-weight: 600; transform: translateX(120%); transition: transform 0.3s ease; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(0, 229, 255, 0.2); border-left: 4px solid var(--cyan); }
+        .toast { background: rgba(13, 20, 33, 0.95); backdrop-filter: blur(10px); border-left: 4px solid var(--cyan); padding: 15px 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); color: #fff; font-weight: 600; transform: translateX(120%); transition: transform 0.3s ease; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(0, 229, 255, 0.2); }
         .toast.show { transform: translateX(0); }
-        .toast.error { border-left-color: #da3633; border-color: rgba(218, 54, 51, 0.2); }
-        .toast.success { border-left-color: var(--green); border-color: rgba(0, 230, 118, 0.2); }
+        .toast.error { border-left-color: #da3633; }
+        .toast.success { border-left-color: var(--green); }
 
-        /* --- MEDIA QUERIES MÓVIL (AQUÍ ESTÁ LA MAGIA CORREGIDA) --- */
+        /* --- MEDIA QUERIES MÓVIL (BLINDADO) --- */
         @media (max-width: 768px) {
             .mobile-menu-btn { display: block; } 
             
             .sidebar { 
                 position: fixed; top: 0; left: 0; height: 100vh; 
                 transform: translateX(-100%); 
-                background: #05080f; /* Fondo 100% sólido para que no se vea borroso */
+                background: #0d1421 !important; /* Fondo sólido a la fuerza */
                 box-shadow: 5px 0 20px rgba(0,0,0,0.8);
+                pointer-events: none; /* Desactivado cuando está oculto */
             }
-            .sidebar.mobile-active { transform: translateX(0); }
+            .sidebar.mobile-active { 
+                transform: translateX(0); 
+                pointer-events: auto; /* Activado cuando se abre */
+            }
             
             .sidebar-header { padding-top: 60px; } 
             .settings-grid, .payment-methods-grid { grid-template-columns: 1fr; }
-            
-            /* Damos espacio arriba para que no choquen los botones */
             .main-content { padding: 70px 15px 30px 15px; } 
         }
     </style>
