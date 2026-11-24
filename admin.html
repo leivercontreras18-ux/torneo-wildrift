@@ -30,14 +30,16 @@
         .bg-overlay { position: fixed; inset: 0; z-index: 0; background: rgba(5, 8, 15, 0.85); pointer-events: none; }
         .hex-pattern { position: fixed; inset: 0; z-index: 0; opacity: 0.1; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3C/svg%3E"); }
 
-        /* --- BOTONES FLOTANTES --- */
+        /* --- BOTÓN VOLVER (Siempre visible) --- */
         .btn-back {
             position: fixed; top: 15px; right: 15px; z-index: 2000;
             background: rgba(13, 20, 33, 0.8); color: #fff; text-decoration: none;
             padding: 6px 12px; border-radius: 5px; font-weight: 600; font-size: 0.8rem;
             border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; backdrop-filter: blur(10px);
         }
+        .btn-back:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); color: var(--cyan); }
 
+        /* --- BOTÓN MENÚ (Solo dentro del Dashboard) --- */
         .mobile-menu-btn {
             display: none; 
             position: fixed; top: 15px; left: 15px; z-index: 2000;
@@ -71,13 +73,12 @@
             width: var(--sidebar-width); background: #05080f; 
             border-right: 1px solid rgba(255,255,255,0.1); 
             display: flex; flex-direction: column; transition: all 0.3s ease; 
-            position: relative; z-index: 1600; /* Por encima del overlay */
+            position: relative; z-index: 1600; 
         }
         .sidebar.collapsed { width: 80px; }
         .sidebar.collapsed .nav-text, .sidebar.collapsed .brand-text { display: none; }
 
         .sidebar-header { padding: 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .menu-toggle { cursor: pointer; font-size: 1.5rem; color: var(--cyan); }
         .brand-text { font-family: 'Orbitron', sans-serif; font-weight: 900; color: #fff; font-size: 1.1rem; }
         
         .nav-menu { padding: 20px 0; flex: 1; overflow-y: auto; }
@@ -127,25 +128,28 @@
         .toast.error { border-left-color: #da3633; }
         .toast.success { border-left-color: var(--green); }
 
-        /* --- MEDIA QUERIES MÓVIL (BLINDADO) --- */
+        /* --- MEDIA QUERIES MÓVIL --- */
         @media (max-width: 768px) {
             .mobile-menu-btn { display: block; } 
             
             .sidebar { 
                 position: fixed; top: 0; left: 0; height: 100vh; 
                 transform: translateX(-100%); 
-                background: #0d1421 !important; /* Fondo sólido a la fuerza */
+                background: #0d1421 !important;
                 box-shadow: 5px 0 20px rgba(0,0,0,0.8);
-                pointer-events: none; /* Desactivado cuando está oculto */
+                pointer-events: none;
             }
             .sidebar.mobile-active { 
                 transform: translateX(0); 
-                pointer-events: auto; /* Activado cuando se abre */
+                pointer-events: auto;
             }
             
             .sidebar-header { padding-top: 60px; } 
             .settings-grid, .payment-methods-grid { grid-template-columns: 1fr; }
             .main-content { padding: 70px 15px 30px 15px; } 
+            
+            /* BAJAMOS LA NOTIFICACIÓN PARA QUE NO TAPE LOS BOTONES */
+            .toast-container { top: 70px; right: 15px; }
         }
     </style>
 </head>
@@ -155,8 +159,7 @@
     <div class="hex-pattern"></div>
     <div class="toast-container" id="toast-container"></div>
 
-    <!-- BOTONES FLOTANTES -->
-    <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+    <!-- Botón Volver (Siempre visible) -->
     <a href="index.html" class="btn-back">← Portada</a>
 
     <!-- Capa oscura para cerrar menú móvil -->
@@ -182,6 +185,9 @@
 
     <!-- PANEL DE CONTROL -->
     <div id="dashboard">
+        <!-- BOTÓN DE MENÚ MOVIDO AQUÍ ADENTRO -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+        
         <div class="layout-wrapper">
             
             <!-- SIDEBAR -->
