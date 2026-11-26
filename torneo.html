@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arena Wild Rift | Torneo Oficial</title>
-    <!-- AQUÍ ESTÁ EL FAVICON -->
+    <!-- Favicon -->
     <link rel="icon" href="logo-nuevo.png" type="image/png">
     
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -56,7 +56,6 @@
         .btn-back { background: rgba(255,255,255,0.05); color: #fff; text-decoration: none; padding: 8px 20px; border-radius: 5px; font-weight: 600; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; z-index: 2; }
         .btn-back:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
 
-        /* Botón menú móvil */
         .menu-mobile { display: none; color: #fff; font-size: 1.8rem; cursor: pointer; z-index: 2;}
 
         /* --- HERO SECTION --- */
@@ -73,30 +72,33 @@
         /* --- CONTENEDOR PRINCIPAL --- */
         .main-container { display: grid; grid-template-columns: 2.2fr 1fr; gap: 20px; max-width: 1300px; margin: 0 auto 40px; padding: 0 20px; }
         
-        .panel { background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid var(--panel-border); border-radius: 10px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .panel { background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid var(--panel-border); border-radius: 10px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden; display: flex; flex-direction: column;}
         .panel::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
 
         .panel-title { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: #fff; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1px; display: flex; justify-content: space-between; }
 
-        /* --- BRACKET CON SCROLL --- */
-        .bracket-scroll { width: 100%; overflow-x: auto; padding-bottom: 15px; }
+        /* --- BRACKET DINÁMICO --- */
+        .bracket-scroll { width: 100%; overflow-x: auto; padding-bottom: 15px; flex: 1;}
         .bracket-scroll::-webkit-scrollbar { height: 8px; }
         .bracket-scroll::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 10px; }
         
-        .bracket-container { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; min-width: 600px; } 
-        .round { display: flex; flex-direction: column; justify-content: space-around; width: 22%; }
-        .round-title { text-align: center; font-size: 0.8rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .bracket-container { display: flex; justify-content: space-around; align-items: stretch; gap: 20px; min-width: 400px; height: 100%; padding: 20px 0;} 
+        .round { display: flex; flex-direction: column; justify-content: space-around; width: 100%; }
+        .round-title { text-align: center; font-size: 0.9rem; color: var(--cyan); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; font-weight: 700; }
         
-        .matchup { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 8px; border-radius: 4px; margin-bottom: 15px; position: relative; }
-        .team-slot { font-size: 0.85rem; padding: 4px 8px; margin: 2px 0; border-radius: 3px; background: rgba(0,0,0,0.3); color: #cbd5e1; display: flex; justify-content: space-between; white-space: nowrap;}
+        .matchup { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 10px; border-radius: 5px; margin-bottom: 15px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .team-slot { font-size: 0.9rem; padding: 6px 10px; margin: 3px 0; border-radius: 3px; background: rgba(0,0,0,0.4); color: #cbd5e1; display: flex; justify-content: space-between; white-space: nowrap; font-weight: 600;}
         .team-slot.winner { color: var(--cyan); border-left: 2px solid var(--cyan); background: rgba(0,229,255,0.1); }
-
-        .connector { position: absolute; right: -10px; top: 50%; width: 10px; height: 1px; background: var(--cyan); }
-        .connector::after { content: ''; position: absolute; right: 0; top: -20px; width: 1px; height: 40px; background: var(--cyan); }
+        
+        .empty-bracket { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; color: #8b949e; font-style: italic; text-align: center; padding: 40px;}
+        .empty-bracket .icon { font-size: 3rem; margin-bottom: 10px; opacity: 0.5;}
 
         /* --- LISTA DE EQUIPOS --- */
-        .team-list { display: flex; flex-direction: column; gap: 8px; }
-        .team-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 4px; border-left: 2px solid transparent; font-size: 0.9rem; font-weight: 600; }
+        .team-list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; max-height: 500px; padding-right: 5px;}
+        .team-list::-webkit-scrollbar { width: 6px; }
+        .team-list::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 10px; }
+        
+        .team-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 10px 12px; border-radius: 4px; border-left: 2px solid transparent; font-size: 0.95rem; font-weight: 600; }
         .team-item.confirmed { border-left-color: var(--green); }
         .team-status { display: flex; align-items: center; gap: 5px; color: var(--green); font-size: 0.8rem; }
 
@@ -196,30 +198,9 @@
         <section class="panel">
             <div class="panel-title">Soporte del Torneo (Bracket)</div>
             <div class="bracket-scroll">
-                <div class="bracket-container">
-                    <div class="round">
-                        <div class="round-title">Octavos</div>
-                        <div class="matchup"><div class="team-slot winner">Equipo A</div><div class="team-slot">Equipo B</div><div class="connector"></div></div>
-                        <div class="matchup"><div class="team-slot">Equipo C</div><div class="team-slot winner">Equipo D</div><div class="connector"></div></div>
-                        <div class="matchup"><div class="team-slot winner">Equipo E</div><div class="team-slot">Equipo F</div><div class="connector"></div></div>
-                        <div class="matchup"><div class="team-slot">Equipo G</div><div class="team-slot winner">Equipo H</div><div class="connector"></div></div>
-                    </div>
-                    <div class="round">
-                        <div class="round-title">Cuartos</div>
-                        <div class="matchup"><div class="team-slot winner">Equipo A</div><div class="team-slot">Equipo D</div><div class="connector"></div></div>
-                        <div class="matchup"><div class="team-slot winner">Equipo E</div><div class="team-slot">Equipo H</div><div class="connector"></div></div>
-                    </div>
-                    <div class="round">
-                        <div class="round-title">Semis</div>
-                        <div class="matchup"><div class="team-slot winner">Equipo A</div><div class="team-slot">Equipo E</div><div class="connector"></div></div>
-                    </div>
-                    <div class="round">
-                        <div class="round-title">Final</div>
-                        <div class="matchup" style="border-color: var(--gold);">
-                            <div class="team-slot winner" style="color: var(--gold); border-left-color: var(--gold);">Equipo A</div>
-                            <div class="team-slot" style="color: #8b949e;">Por definir</div>
-                        </div>
-                    </div>
+                <!-- Aquí JavaScript inyectará el bracket dinámico -->
+                <div id="bracket-container" class="bracket-container">
+                    <p class="empty-bracket">Cargando llaves...</p>
                 </div>
             </div>
         </section>
@@ -348,6 +329,7 @@
             setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 4000);
         }
 
+        // --- 1. CARGAR LISTA DE EQUIPOS CONFIRMADOS ---
         async function cargarEquipos() {
             const listaHTML = document.getElementById('lista-equipos');
             const contadorHTML = document.getElementById('team-count');
@@ -371,10 +353,9 @@
             });
         }
 
+        // --- 2. CARGAR CONFIGURACIÓN (PRECIOS/PAGOS) ---
         async function cargarConfiguracion() {
-            // Usamos maybeSingle para que no de error 406 si la fila está vacía
             const { data, error } = await db.from('settings').select('*').eq('id', 1).maybeSingle();
-            
             if (data) {
                 document.getElementById('ui-entry-fee').innerText = data.entry_fee || 'Por definir';
                 document.getElementById('ui-prize').innerText = data.prize_pool || 'Por definir';
@@ -385,14 +366,79 @@
                 document.getElementById('ui-pm-id').innerText = data.pm_id || 'No definido';
                 document.getElementById('ui-pm-bank').innerText = data.pm_bank || 'No definido';
                 document.getElementById('ui-binance').innerText = data.binance_id || 'No definido';
-            } else {
-                console.log("La tabla settings está vacía o no tiene la fila 1. Ejecuta el SQL de configuración.");
             }
         }
 
+        // --- 3. CARGAR EL BRACKET DINÁMICO DESDE LA TABLA MATCHES ---
+        async function cargarBracket() {
+            const bracketContainer = document.getElementById('bracket-container');
+            
+            // Primero, traemos todos los equipos para saber sus nombres a partir de sus IDs
+            const { data: teams, error: errorTeams } = await db.from('teams').select('id, team_name');
+            if (errorTeams) {
+                bracketContainer.innerHTML = '<p style="color:red;">Error al cargar equipos.</p>';
+                return;
+            }
+
+            // Creamos un diccionario para buscar rápido: { 1: "Alpha Squad", 2: "Nova" }
+            const teamMap = {};
+            teams.forEach(t => teamMap[t.id] = t.team_name);
+
+            // Ahora traemos las partidas
+            const { data: matches, error: errorMatches } = await db.from('matches').select('*').order('match_number');
+            
+            if (errorMatches || !matches || matches.length === 0) {
+                // Si no hay partidas generadas, mostramos el mensaje de espera
+                bracketContainer.innerHTML = `
+                    <div class="empty-bracket">
+                        <div class="icon">🏆</div>
+                        <h3>Esperando Sorteo</h3>
+                        <p>Las llaves se revelarán cuando el organizador realice el sorteo oficial.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Si hay partidas, las dibujamos.
+            // Como de momento el admin solo genera Ronda 1, dibujamos esa columna.
+            let htmlBracket = '';
+
+            matches.forEach(match => {
+                const nameA = teamMap[match.team_a_id] || 'Por definir';
+                const nameB = teamMap[match.team_b_id] || 'Por definir';
+                
+                htmlBracket += `
+                    <div class="matchup">
+                        <div class="team-slot">${nameA}</div>
+                        <div class="team-slot">${nameB}</div>
+                    </div>
+                `;
+            });
+
+            // Estructura visual para la Ronda 1
+            bracketContainer.innerHTML = `
+                <div class="round">
+                    <div class="round-title">Ronda 1</div>
+                    ${htmlBracket}
+                </div>
+                <div class="round">
+                    <div class="round-title">Semifinales</div>
+                    <div class="matchup"><div class="team-slot">Por definir</div><div class="team-slot">Por definir</div></div>
+                    <div class="matchup"><div class="team-slot">Por definir</div><div class="team-slot">Por definir</div></div>
+                </div>
+                <div class="round">
+                    <div class="round-title">Gran Final</div>
+                    <div class="matchup" style="border-color: var(--gold);"><div class="team-slot">Por definir</div><div class="team-slot">Por definir</div></div>
+                </div>
+            `;
+        }
+
+        // Ejecutar todas las cargas al abrir la página
         cargarEquipos();
         cargarConfiguracion();
+        cargarBracket();
 
+        // --- 4. LÓGICA DEL MODAL DE INSCRIPCIÓN ---
         const modal = document.getElementById('modal-inscripcion');
         const btnAbrir = document.getElementById('btn-abrir-modal');
         const closeBtn = document.getElementById('cerrar-modal');
