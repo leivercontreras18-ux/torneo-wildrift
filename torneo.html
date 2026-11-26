@@ -196,7 +196,8 @@
 
     <main class="main-container">
         <section class="panel">
-            <div class="panel-title">Soporte del Torneo (Bracket)</div>
+            <!-- CAMBIO DE TÍTULO AQUÍ -->
+            <div class="panel-title">Enfrentamientos</div>
             <div class="bracket-scroll">
                 <!-- Aquí JavaScript inyectará el bracket dinámico -->
                 <div id="bracket-container" class="bracket-container">
@@ -373,22 +374,18 @@
         async function cargarBracket() {
             const bracketContainer = document.getElementById('bracket-container');
             
-            // Primero, traemos todos los equipos para saber sus nombres a partir de sus IDs
             const { data: teams, error: errorTeams } = await db.from('teams').select('id, team_name');
             if (errorTeams) {
                 bracketContainer.innerHTML = '<p style="color:red;">Error al cargar equipos.</p>';
                 return;
             }
 
-            // Creamos un diccionario para buscar rápido: { 1: "Alpha Squad", 2: "Nova" }
             const teamMap = {};
             teams.forEach(t => teamMap[t.id] = t.team_name);
 
-            // Ahora traemos las partidas
             const { data: matches, error: errorMatches } = await db.from('matches').select('*').order('match_number');
             
             if (errorMatches || !matches || matches.length === 0) {
-                // Si no hay partidas generadas, mostramos el mensaje de espera
                 bracketContainer.innerHTML = `
                     <div class="empty-bracket">
                         <div class="icon">🏆</div>
@@ -399,14 +396,10 @@
                 return;
             }
 
-            // Si hay partidas, las dibujamos.
-            // Como de momento el admin solo genera Ronda 1, dibujamos esa columna.
             let htmlBracket = '';
-
             matches.forEach(match => {
                 const nameA = teamMap[match.team_a_id] || 'Por definir';
                 const nameB = teamMap[match.team_b_id] || 'Por definir';
-                
                 htmlBracket += `
                     <div class="matchup">
                         <div class="team-slot">${nameA}</div>
@@ -415,7 +408,6 @@
                 `;
             });
 
-            // Estructura visual para la Ronda 1
             bracketContainer.innerHTML = `
                 <div class="round">
                     <div class="round-title">Ronda 1</div>
@@ -433,7 +425,6 @@
             `;
         }
 
-        // Ejecutar todas las cargas al abrir la página
         cargarEquipos();
         cargarConfiguracion();
         cargarBracket();
