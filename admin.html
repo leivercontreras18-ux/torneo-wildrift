@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración | Arena Wild Rift</title>
+    <link rel="icon" href="logo-nuevo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -41,8 +42,7 @@
         .btn-back:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); color: var(--cyan); }
 
         .mobile-menu-btn {
-            display: none; 
-            position: fixed; top: 15px; left: 15px; z-index: 1003;
+            display: none; position: fixed; top: 15px; left: 15px; z-index: 1003;
             background: rgba(13, 20, 33, 0.8); color: var(--cyan); border: 1px solid var(--cyan);
             padding: 6px 12px; border-radius: 5px; font-size: 1.1rem; cursor: pointer;
             backdrop-filter: blur(10px); transition: 0.3s;
@@ -57,7 +57,11 @@
         /* --- LOGIN --- */
         #login-section { position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 20px;}
         .login-container { background: var(--panel-bg); backdrop-filter: blur(15px); padding: 40px; border-radius: 10px; border: 1px solid var(--cyan); box-shadow: 0 0 30px rgba(0,229,255,0.2); width: 100%; max-width: 400px; text-align: center; }
-        .login-container h1 { font-family: 'Orbitron', sans-serif; color: var(--cyan); margin-top: 0; margin-bottom: 20px; font-size: 1.8rem;}
+        
+        /* LOGO EN LOGIN */
+        .login-logo { width: 180px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(0,229,255,0.5)); }
+
+        .login-container h1 { font-family: 'Orbitron', sans-serif; color: var(--cyan); margin-top: 0; margin-bottom: 20px; font-size: 1.5rem;}
         .input-group { margin-bottom: 20px; text-align: left; }
         .input-group label { display: block; margin-bottom: 5px; font-weight: 700; }
         .input-group input { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #30363d; background-color: rgba(0,0,0,0.5); color: #fff; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; font-size: 16px;}
@@ -126,6 +130,10 @@
         .btn-delete { background-color: var(--red); color: #fff; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: 700; transition: 0.3s; }
         .btn-delete:hover { background-color: #f85149; box-shadow: 0 0 10px rgba(218,54,51,0.5); }
 
+        /* Zona de Generar Llaves */
+        .generate-area { text-align: center; padding: 40px 20px; }
+        .generate-area p { font-size: 1.1rem; margin-bottom: 20px; color: #a0aec0; }
+
         /* --- NOTIFICACIÓN TOAST --- */
         .toast-container { position: fixed; top: 15px; right: 15px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: calc(100% - 30px); max-width: 350px;}
         .toast { background: rgba(13, 20, 33, 0.95); backdrop-filter: blur(10px); border-left: 4px solid var(--cyan); padding: 15px 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); color: #fff; font-weight: 600; transform: translateX(120%); transition: transform 0.3s ease; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(0, 229, 255, 0.2); border-left: 4px solid var(--cyan); }
@@ -136,14 +144,8 @@
         /* --- MEDIA QUERIES MÓVIL --- */
         @media (max-width: 768px) {
             .mobile-menu-btn { display: block; } 
-            .sidebar { 
-                position: fixed; top: 0; left: 0; height: 100vh; 
-                transform: translateX(-100%); 
-                background: #05080f; 
-                box-shadow: 5px 0 20px rgba(0,0,0,0.8);
-            }
+            .sidebar { position: fixed; top: 0; left: 0; height: 100vh; transform: translateX(-100%); background: #05080f; box-shadow: 5px 0 20px rgba(0,0,0,0.8); }
             .sidebar.mobile-active { transform: translateX(0); }
-            
             .sidebar-header { padding-top: 60px; } 
             .settings-grid, .payment-methods-grid { grid-template-columns: 1fr; }
             .main-content { padding: 70px 15px 30px 15px; } 
@@ -160,12 +162,12 @@
     <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
     <a href="index.html" class="btn-back">← Portada</a>
 
-    <!-- Capa oscura para cerrar menú móvil -->
     <div class="mobile-overlay" id="mobile-overlay"></div>
 
-    <!-- LOGIN -->
+    <!-- LOGIN CON LOGO -->
     <div id="login-section">
         <div class="login-container">
+            <img src="logo-nuevo.png" alt="Arena Wild Rift" class="login-logo">
             <h1>Acceso Organizador</h1>
             <form id="login-form">
                 <div class="input-group">
@@ -206,6 +208,10 @@
                     </a>
                     <a class="nav-item" data-target="view-confirmados">
                         <span class="nav-icon">✅</span> <span class="nav-text">Equipos Confirmados</span>
+                    </a>
+                    <!-- NUEVO BOTÓN: GESTIONAR LLAVES -->
+                    <a class="nav-item" data-target="view-bracket">
+                        <span class="nav-icon">🏆</span> <span class="nav-text">Gestionar Llaves</span>
                     </a>
                 </div>
                 
@@ -322,6 +328,28 @@
                     </div>
                 </div>
 
+                <!-- VISTA 6: GESTIONAR LLAVES (NUEVO) -->
+                <div id="view-bracket" class="content-section">
+                    <div class="panel-box">
+                        <h2>Gestor de Llaves</h2>
+                        <div class="generate-area">
+                            <p>Haz clic en el botón para mezclar a los equipos confirmados al azar y generar los enfrentamientos de la primera ronda.</p>
+                            <button class="btn-esports" id="btn-generar-bracket" style="max-width: 350px; font-size: 1.1rem;">Sortear y Generar Bracket</button>
+                        </div>
+                    </div>
+                    <div class="panel-box" id="preview-bracket" style="display: none;">
+                        <h2>Vista Previa de los Cruces</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Partida</th><th>Equipo A</th><th>vs</th><th>Equipo B</th></tr>
+                                </thead>
+                                <tbody id="tabla-cruces"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -415,7 +443,7 @@
         }
 
         async function cargarConfiguracion() {
-            const { data } = await db.from('settings').select('*').eq('id', 1).single();
+            const { data } = await db.from('settings').select('*').eq('id', 1).maybeSingle();
             if (data) {
                 document.getElementById('setting-fee').value = data.entry_fee || '';
                 document.getElementById('setting-prize').value = data.prize_pool || '';
@@ -423,7 +451,7 @@
         }
 
         async function cargarPagos() {
-            const { data } = await db.from('settings').select('*').eq('id', 1).single();
+            const { data } = await db.from('settings').select('*').eq('id', 1).maybeSingle();
             if (data) {
                 document.getElementById('setting-pm-phone').value = data.pm_phone || '';
                 document.getElementById('setting-pm-id').value = data.pm_id || '';
@@ -445,7 +473,7 @@
             const { error } = await db.from('settings').update({
                 entry_fee: document.getElementById('setting-fee').value,
                 prize_pool: document.getElementById('setting-prize').value
-            }).eq('id', 1).select(); // <-- SELECT PARA EVITAR ERROR 400
+            }).eq('id', 1).select();
             
             if (error) mostrarNotificacion('Error al guardar: ' + error.message, 'error');
             else mostrarNotificacion('Configuración guardada', 'success');
@@ -460,7 +488,7 @@
                 pm_id: document.getElementById('setting-pm-id').value,
                 pm_bank: document.getElementById('setting-pm-bank').value,
                 binance_id: document.getElementById('setting-binance').value
-            }).eq('id', 1).select(); // <-- SELECT PARA EVITAR ERROR 400
+            }).eq('id', 1).select();
             
             if (error) mostrarNotificacion('Error al guardar: ' + error.message, 'error');
             else mostrarNotificacion('Métodos de pago guardados', 'success');
@@ -481,9 +509,7 @@
                 fila.innerHTML = `
                     <td style="font-weight:bold; color:white;">${equipo.team_name}</td>
                     <td>${equipo.captain_name}</td>
-                    <td style="font-size:0.85rem; color:#a0aec0;">
-                        ${equipo.player_1}<br>${equipo.player_2}<br>${equipo.player_3}<br>${equipo.player_4}<br>${equipo.player_5}
-                    </td>
+                    <td style="font-size:0.85rem; color:#a0aec0;">${equipo.player_1}<br>${equipo.player_2}<br>${equipo.player_3}<br>${equipo.player_4}<br>${equipo.player_5}</td>
                     <td>${equipo.contact_info}</td>
                     <td style="font-weight:bold; color:var(--cyan);">${equipo.payment_proof}</td>
                     <td>
@@ -509,9 +535,7 @@
                 fila.innerHTML = `
                     <td style="font-weight:bold; color:white;">${equipo.team_name}</td>
                     <td>${equipo.captain_name}</td>
-                    <td style="font-size:0.85rem; color:#a0aec0;">
-                        ${equipo.player_1}<br>${equipo.player_2}<br>${equipo.player_3}<br>${equipo.player_4}<br>${equipo.player_5}
-                    </td>
+                    <td style="font-size:0.85rem; color:#a0aec0;">${equipo.player_1}<br>${equipo.player_2}<br>${equipo.player_3}<br>${equipo.player_4}<br>${equipo.player_5}</td>
                     <td>${equipo.contact_info}</td>
                     <td><button class="btn-delete" onclick="eliminarEquipo(${equipo.id})">Eliminar</button></td>
                 `;
@@ -532,17 +556,85 @@
 
         window.eliminarEquipo = async function(id) {
             if (!confirm('¿Estás seguro de que quieres eliminar este equipo permanentemente?')) return;
-            
             const { error } = await db.from('teams').delete().eq('id', id);
-            
-            if (error) {
-                mostrarNotificacion('Error al eliminar: ' + error.message, 'error');
-            } else {
+            if (error) { mostrarNotificacion('Error al eliminar: ' + error.message, 'error'); } 
+            else {
                 mostrarNotificacion('Equipo eliminado.', 'success');
                 cargarPendientes();
                 cargarConfirmados();
                 actualizarDashboard();
             }
+        }
+
+        // --- LÓGICA PARA GENERAR EL BRACKET ALEATORIO ---
+        document.getElementById('btn-generar-bracket').addEventListener('click', async () => {
+            if (!confirm('Esto borrará cualquier llave anterior y generará nuevos cruces aleatorios. ¿Continuar?')) return;
+
+            const btn = document.getElementById('btn-generar-bracket');
+            btn.textContent = 'Generando...';
+
+            // 1. Obtener equipos confirmados
+            const { data: teams, error: fetchError } = await db.from('teams').select('id, team_name').eq('status', 'Confirmado');
+
+            if (fetchError || !teams || teams.length < 2) {
+                mostrarNotificacion('No hay suficientes equipos confirmados (mínimo 2) para generar llaves.', 'error');
+                btn.textContent = 'Sortear y Generar Bracket';
+                return;
+            }
+
+            // 2. Mezclar equipos aleatoriamente
+            const shuffled = [...teams].sort(() => Math.random() - 0.5);
+
+            // 3. Crear los enfrentamientos
+            const matchesToInsert = [];
+            for (let i = 0; i < shuffled.length; i += 2) {
+                if (shuffled[i + 1]) {
+                    matchesToInsert.push({
+                        round: 1,
+                        match_number: (i / 2) + 1,
+                        team_a_id: shuffled[i].id,
+                        team_b_id: shuffled[i + 1].id,
+                        status: 'Pendiente'
+                    });
+                }
+            }
+
+            // 4. Limpiar llaves viejas y guardar las nuevas
+            await db.from('matches').delete().neq('id', 0); // Borra todo
+            const { error: insertError } = await db.from('matches').insert(matchesToInsert);
+
+            if (insertError) {
+                mostrarNotificacion('Error al guardar las llaves.', 'error');
+                console.error(insertError);
+                btn.textContent = 'Sortear y Generar Bracket';
+                return;
+            }
+
+            // 5. Mostrar vista previa
+            mostrarNotificacion('¡Bracket generado con éxito!', 'success');
+            mostrarVistaPrevia(matchesToInsert, shuffled);
+            btn.textContent = 'Sortear y Generar Bracket';
+        });
+
+        function mostrarVistaPrevia(matches, teamsList) {
+            const container = document.getElementById('preview-bracket');
+            const tbody = document.getElementById('tabla-cruces');
+            tbody.innerHTML = '';
+            container.style.display = 'block';
+
+            matches.forEach(match => {
+                const teamA = teamsList.find(t => t.id === match.team_a_id)?.team_name || 'Desconocido';
+                const teamB = teamsList.find(t => t.id === match.team_b_id)?.team_name || 'Desconocido';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight:bold;">Partida ${match.match_number}</td>
+                    <td style="color:var(--cyan); font-weight:bold;">${teamA}</td>
+                    <td style="color:var(--magenta); font-weight:900;">VS</td>
+                    <td style="color:var(--magenta); font-weight:bold;">${teamB}</td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
     </script>
 </body>
