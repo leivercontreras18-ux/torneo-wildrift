@@ -3,117 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arena WildRift - Bienvenida</title>
+  <title>Arena Wild Rift | Torneos de Wild Rift</title>
+  <meta name="description" content="Torneos de Wild Rift 5v5 con premios. Inscribe a tu equipo y sigue las llaves en vivo.">
+  <meta name="theme-color" content="#070b12">
+
+  <!-- Vista previa al compartir el link en WhatsApp y redes.
+       IMPORTANTE: cambia TUUSUARIO y TUREPO por los datos reales de tu GitHub Pages -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Arena Wild Rift | Torneos de Wild Rift">
+  <meta property="og:description" content="Inscribe a tu equipo 5v5 y sigue las llaves en vivo.">
+  <meta property="og:image" content="https://TUUSUARIO.github.io/TUREPO/logo-nuevo.png">
+  <meta property="og:url" content="https://TUUSUARIO.github.io/TUREPO/">
+  <meta name="twitter:card" content="summary_large_image">
+
   <link rel="icon" href="favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
-  
+
   <style>
-    :root {
-      --bg-dark: #070b12;
-      --cyan-neon: #00f0ff;
-      --cyan-glow: rgba(0, 240, 255, 0.45);
-      --slate-border: #3d4859;
+    :root{--bg-dark:#070b12;--cyan-neon:#00f0ff;--cyan-glow:rgba(0,240,255,.45);--slate-border:#3d4859}
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    body{background:var(--bg-dark);color:#fff;font-family:'Rajdhani',sans-serif;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;overflow-x:hidden;position:relative}
+    /* Fondo fijo que también funciona en celulares */
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:url('fondo-torneo.jpg') center bottom/cover no-repeat}
+    .bg-overlay{position:fixed;inset:0;z-index:0;background:radial-gradient(circle at center,rgba(7,11,18,.3) 0%,rgba(7,11,18,.85) 100%);pointer-events:none}
+    .hex-pattern{position:fixed;inset:0;z-index:0;opacity:.1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3C/svg%3E")}
+
+    header{position:relative;z-index:2;padding:24px 36px}
+    .brand-mini{font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:2px;color:#cbd5e1;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.8)}
+
+    main{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;flex:1}
+    .logo-img-container{width:500px;max-width:90vw;margin-bottom:30px;animation:flotar 4s ease-in-out infinite}
+    .logo-img-container img{width:100%;height:auto;filter:drop-shadow(0 0 30px rgba(0,240,255,.4)) drop-shadow(0 0 20px rgba(230,0,255,.3))}
+    @keyframes flotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+
+    .actions{display:flex;flex-direction:column;gap:20px;width:100%;max-width:380px;padding:0 15px}
+    .btn-esports{position:relative;display:inline-flex;align-items:center;justify-content:center;height:58px;font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;transition:all .25s ease;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)}
+
+    .btn-primary{background:linear-gradient(180deg,#38f6ff 0%,#00b8d4 100%);color:#041019;box-shadow:0 0 25px var(--cyan-glow)}
+    .btn-primary::before{content:'';position:absolute;inset:3px;border:1px solid rgba(255,255,255,.65);clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);pointer-events:none}
+    .btn-primary-wrap{filter:drop-shadow(0 0 14px var(--cyan-glow));transition:transform .2s ease,filter .2s ease}
+    .btn-primary-wrap:hover{transform:translateY(-2px);filter:drop-shadow(0 0 22px rgba(0,240,255,.8))}
+
+    .btn-secondary-wrap{background:var(--slate-border);padding:2px;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);transition:all .25s ease}
+    .btn-secondary{width:100%;background:linear-gradient(180deg,#1e2633 0%,#111620 100%);color:#cbd5e1}
+    .btn-secondary-wrap:hover{background:#64748b;transform:translateY(-2px)}
+    .btn-secondary-wrap:hover .btn-secondary{color:#fff}
+
+    footer{position:relative;z-index:2;text-align:center;padding:24px 16px;font-size:.85rem;color:rgba(203,213,225,.75);text-shadow:0 1px 2px #000;line-height:1.6}
+    footer a{color:inherit;text-decoration:none;margin:0 8px;transition:color .2s ease}
+    footer a:hover{color:var(--cyan-neon)}
+    footer small{display:block;margin-top:6px;font-size:.75rem;opacity:.8}
+
+    /* Teclado: se ve dónde está el foco */
+    a:focus-visible{outline:2px solid var(--cyan-neon);outline-offset:4px}
+
+    @media (max-width:768px){
+      header{padding:15px 20px;text-align:center}
+      .logo-img-container{width:350px;margin-bottom:20px}
+      .actions{gap:15px}
+      .btn-esports{height:50px;font-size:1rem}
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background-color: var(--bg-dark);
-      color: #ffffff;
-      font-family: 'Rajdhani', sans-serif;
-      min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: space-between;
-      overflow-x: hidden; position: relative;
-      
-      background-image: url('fondo-torneo.jpg');
-      background-size: cover;
-      background-position: center bottom;
-      background-attachment: fixed;
-    }
-
-    .bg-overlay {
-      position: fixed; inset: 0; z-index: 0;
-      background: radial-gradient(circle at center, rgba(7, 11, 18, 0.3) 0%, rgba(7, 11, 18, 0.85) 100%);
-      pointer-events: none;
-    }
-
-    .hex-pattern {
-      position: fixed; inset: 0; z-index: 0; opacity: 0.1; pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3C/svg%3E");
-    }
-
-    header { position: relative; z-index: 2; padding: 24px 36px; }
-    .brand-mini {
-      font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: 700;
-      letter-spacing: 2px; color: #cbd5e1; text-transform: uppercase;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-    }
-
-    main {
-      position: relative; z-index: 2;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 20px; text-align: center; flex: 1;
-    }
-
-    .logo-img-container {
-      width: 500px;
-      max-width: 90vw; /* Adaptación móvil */
-      margin-bottom: 30px;
-      animation: flotar 4s ease-in-out infinite;
-    }
-
-    .logo-img-container img {
-      width: 100%;
-      height: auto;
-      filter: drop-shadow(0 0 30px rgba(0, 240, 255, 0.4)) drop-shadow(0 0 20px rgba(230, 0, 255, 0.3));
-    }
-
-    @keyframes flotar {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-      100% { transform: translateY(0px); }
-    }
-
-    .actions { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 380px; padding: 0 15px;}
-
-    .btn-esports {
-      position: relative; display: inline-flex; align-items: center; justify-content: center;
-      height: 58px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700;
-      letter-spacing: 2px; text-transform: uppercase; text-decoration: none; cursor: pointer;
-      border: none; transition: all 0.25s ease;
-      clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
-    }
-
-    .btn-primary { background: linear-gradient(180deg, #38f6ff 0%, #00b8d4 100%); color: #041019; box-shadow: 0 0 25px var(--cyan-glow); }
-    .btn-primary::before {
-      content: ''; position: absolute; inset: 3px; border: 1px solid rgba(255, 255, 255, 0.65);
-      clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
-      pointer-events: none;
-    }
-    .btn-primary-wrap { filter: drop-shadow(0 0 14px var(--cyan-glow)); transition: transform 0.2s ease, filter 0.2s ease; }
-    .btn-primary-wrap:hover { transform: translateY(-2px); filter: drop-shadow(0 0 22px rgba(0, 240, 255, 0.8)); }
-
-    .btn-secondary-wrap { background: var(--slate-border); padding: 2px; clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px); transition: all 0.25s ease; }
-    .btn-secondary { width: 100%; background: linear-gradient(180deg, #1e2633 0%, #111620 100%); color: #cbd5e1; }
-    .btn-secondary-wrap:hover { background: #64748b; transform: translateY(-2px); }
-    .btn-secondary-wrap:hover .btn-secondary { color: #ffffff; }
-
-    footer {
-      position: relative; z-index: 2; text-align: center; padding: 24px 16px;
-      font-size: 0.85rem; color: rgba(203, 213, 225, 0.7); text-shadow: 0 1px 2px #000;
-    }
-    footer a { color: inherit; text-decoration: none; margin: 0 8px; transition: color 0.2s ease; }
-    footer a:hover { color: var(--cyan-neon); }
-
-    /* --- MEDIA QUERIES PARA MÓVIL --- */
-    @media (max-width: 768px) {
-      header { padding: 15px 20px; text-align: center; }
-      .logo-img-container { width: 350px; margin-bottom: 20px; }
-      .actions { gap: 15px; }
-      .btn-esports { height: 50px; font-size: 1rem; }
-    }
+    /* Respeta a quien prefiere menos movimiento */
+    @media (prefers-reduced-motion:reduce){.logo-img-container{animation:none}*{transition:none!important}}
   </style>
 </head>
 <body>
@@ -127,14 +81,13 @@
 
   <main>
     <div class="logo-img-container">
-      <img src="logo-nuevo.png" alt="Arena Wild Rift Logo">
+      <img src="logo-nuevo.png" alt="Arena Wild Rift" decoding="async" fetchpriority="high">
     </div>
 
     <div class="actions">
       <div class="btn-primary-wrap">
         <a href="torneo.html" class="btn-esports btn-primary">ENTRAR AL TORNEO</a>
       </div>
-
       <div class="btn-secondary-wrap">
         <a href="admin.html" class="btn-esports btn-secondary">ACCESO ORGANIZADOR</a>
       </div>
@@ -142,8 +95,10 @@
   </main>
 
   <footer>
-    <a href="#terminos">Términos y Condiciones</a> | 
-    <a href="#privacidad">Política de Privacidad</a>
+    <a href="legal.html#terminos">Términos y condiciones</a> |
+    <a href="legal.html#privacidad">Política de privacidad</a> |
+    <a href="legal.html#reembolsos">Reembolsos</a>
+    <small>Arena Wild Rift es un torneo organizado por la comunidad y no está afiliado ni respaldado por Riot Games, Inc.</small>
   </footer>
 
 </body>

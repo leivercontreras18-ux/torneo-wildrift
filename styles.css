@@ -1,0 +1,48 @@
+/* ===== Estilos compartidos de Arena Wild Rift (torneo.html, admin.html, legal.html) ===== */
+:root{--bg:#05080f;--panel:rgba(13,20,33,.85);--cyan:#00e5ff;--magenta:#ff007f;--gold:#ffc107;--green:#00e676;--yellow:#ffab00;--red:#da3633;--text:#e2e8f0;--muted:#a0aec0}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;position:relative;overflow-x:hidden}
+
+/* Fondo fijo: funciona también en celulares (iPhone ignora background-attachment:fixed) */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(rgba(5,8,15,.75),rgba(5,8,15,.93)),url('fondo-torneo.jpg') center/cover no-repeat}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.1;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%2300f0ff' stroke-width='1'/%3E%3C/svg%3E")}
+.z1{position:relative;z-index:1}
+
+/* Botón principal */
+.btn-esports{display:inline-flex;align-items:center;justify-content:center;padding:12px 24px;font:700 1.05rem 'Rajdhani',sans-serif;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;color:#fff;text-decoration:none;background:linear-gradient(90deg,var(--cyan),var(--magenta));box-shadow:0 0 20px rgba(255,0,127,.4);transition:.25s;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px)}
+.btn-esports:hover:not(:disabled){transform:scale(1.02);box-shadow:0 0 30px rgba(0,229,255,.6)}
+.btn-esports:disabled{opacity:.5;cursor:not-allowed;filter:grayscale(.6)}
+.block{width:100%}
+
+/* Botones pequeños */
+.btn{padding:8px 15px;border:none;border-radius:5px;cursor:pointer;font:700 .95rem 'Rajdhani',sans-serif;color:#000;transition:.3s}
+.btn:hover{filter:brightness(1.15)}
+.btn-green{background:var(--green)}
+.btn-cyan{background:var(--cyan)}
+.btn-red{background:var(--red);color:#fff}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+
+/* Formularios */
+.form-group{margin-bottom:15px;text-align:left}
+.form-group label{display:block;font-weight:700;margin-bottom:5px;font-size:.9rem}
+.form-group input{width:100%;padding:12px;border-radius:5px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.5);color:#fff;font:inherit;font-size:16px;transition:.3s}
+.form-group input:focus{outline:none;border-color:var(--magenta)}
+
+/* Avisos (toast) */
+.toast-container{position:fixed;top:15px;right:15px;z-index:9999;display:flex;flex-direction:column;gap:10px;width:calc(100% - 30px);max-width:350px}
+.toast{background:rgba(13,20,33,.96);backdrop-filter:blur(10px);border:1px solid rgba(0,229,255,.2);border-left:4px solid var(--cyan);padding:14px 18px;border-radius:5px;box-shadow:0 5px 15px rgba(0,0,0,.5);color:#fff;font-weight:600;transform:translateX(120%);transition:transform .3s ease;display:flex;align-items:center;gap:10px}
+.toast.show{transform:none}
+.toast.error{border-left-color:var(--red)}
+.toast.success{border-left-color:var(--green)}
+
+/* Ventanas emergentes */
+.modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.85);backdrop-filter:blur(5px);justify-content:center;align-items:center;padding:15px}
+.modal.open{display:flex}
+.modal-box{background:rgba(13,20,33,.97);padding:25px;border:1px solid var(--cyan);border-radius:10px;width:100%;max-width:600px;position:relative;box-shadow:0 0 30px rgba(0,229,255,.2);max-height:90vh;overflow-y:auto;animation:zoom .3s ease}
+.modal-box h2,.modal-box h3{font-family:'Orbitron',sans-serif;color:var(--cyan);text-align:center;margin-bottom:15px}
+@keyframes zoom{from{transform:scale(.95);opacity:0}to{transform:none;opacity:1}}
+
+/* Accesibilidad */
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
