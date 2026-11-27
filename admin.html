@@ -132,6 +132,7 @@
         /* Zona de Generar Llaves */
         .generate-area { text-align: center; padding: 40px 20px; }
         .generate-area p { font-size: 1.1rem; margin-bottom: 20px; color: #a0aec0; }
+        .btn-group-bracket { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
 
         /* --- NOTIFICACIÓN TOAST --- */
         .toast-container { position: fixed; top: 15px; right: 15px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: calc(100% - 30px); max-width: 350px;}
@@ -361,7 +362,12 @@
                         <h2>Gestor de Llaves</h2>
                         <div class="generate-area">
                             <p>Haz clic en el botón para mezclar a los equipos confirmados al azar y generar los enfrentamientos de la primera ronda.</p>
-                            <button class="btn-esports" id="btn-generar-bracket" style="max-width: 350px; font-size: 1.1rem;">Sortear y Generar Bracket</button>
+                            
+                            <!-- NUEVO GRUPO DE BOTONES -->
+                            <div class="btn-group-bracket">
+                                <button class="btn-esports" id="btn-generar-bracket" style="max-width: 250px; font-size: 1rem;">Sortear y Generar Bracket</button>
+                                <button class="btn-delete" id="btn-borrar-bracket" style="max-width: 250px; font-size: 1rem; clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);">Borrar Llaves</button>
+                            </div>
                         </div>
                     </div>
                     <div class="panel-box" id="preview-bracket" style="display: none;">
@@ -381,7 +387,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE CONFIRMACIÓN PERSONALIZADO (Reemplaza los alerts feos) -->
+    <!-- MODAL DE CONFIRMACIÓN PERSONALIZADO -->
     <div id="custom-confirm-modal" class="custom-modal-overlay">
         <div class="custom-modal-box">
             <h3 id="custom-modal-title">Confirmación</h3>
@@ -412,7 +418,6 @@
                 const btnAccept = document.getElementById('custom-modal-accept');
                 const btnCancel = document.getElementById('custom-modal-cancel');
                 
-                // Clonamos los botones para eliminar event listeners anteriores
                 const newAccept = btnAccept.cloneNode(true);
                 const newCancel = btnCancel.cloneNode(true);
                 btnAccept.parentNode.replaceChild(newAccept, btnAccept);
@@ -613,7 +618,6 @@
         }
 
         window.aprobarEquipo = async function(id) {
-            // REEMPLAZADO CON CUSTOM CONFIRM
             const confirmado = await customConfirm('¿Estás seguro de aprobar este equipo? Aparecerá en la web pública.', 'Aprobar Equipo');
             if (!confirmado) return;
             
@@ -627,7 +631,6 @@
         }
 
         window.eliminarEquipo = async function(id) {
-            // REEMPLAZADO CON CUSTOM CONFIRM
             const confirmado = await customConfirm('¿Estás seguro de eliminar este equipo permanentemente? Esta acción no se puede deshacer.', 'Eliminar Equipo');
             if (!confirmado) return;
             
@@ -641,9 +644,8 @@
             }
         }
 
-        // --- LÓGICA PARA GENERAR EL BRACKET ALEATORIO ---
+        // --- GENERAR BRACKET ALEATORIO ---
         document.getElementById('btn-generar-bracket').addEventListener('click', async () => {
-            // REEMPLAZADO CON CUSTOM CONFIRM
             const confirmado = await customConfirm('Esto borrará cualquier llave anterior y generará nuevos cruces aleatorios. ¿Deseas continuar?', 'Generar Sorteo');
             if (!confirmado) return;
 
@@ -686,6 +688,25 @@
             mostrarNotificacion('¡Bracket generado con éxito!', 'success');
             mostrarVistaPrevia(matchesToInsert, shuffled);
             btn.textContent = 'Sortear y Generar Bracket';
+        });
+
+        // --- BORRAR BRACKET ACTUAL ---
+        document.getElementById('btn-borrar-bracket').addEventListener('click', async () => {
+            const confirmado = await customConfirm('¿Estás seguro de borrar todas las llaves actuales? La página pública volverá a decir "Esperando Sorteo".', 'Borrar Llaves');
+            if (!confirmado) return;
+
+            const btn = document.getElementById('btn-borrar-bracket');
+            btn.textContent = 'Borrando...';
+
+            const { error } = await db.from('matches').delete().neq('id', 0);
+
+            if (error) {
+                mostrarNotificacion('Error al borrar las llaves.', 'error');
+            } else {
+                mostrarNotificacion('Llaves borradas. Esperando nuevo sorteo.', 'success');
+                document.getElementById('preview-bracket').style.display = 'none'; // Ocultar la tabla de vista previa
+            }
+            btn.textContent = 'Borrar Llaves';
         });
 
         function mostrarVistaPrevia(matches, teamsList) {
