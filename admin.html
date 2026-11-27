@@ -58,7 +58,6 @@
         #login-section { position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 20px;}
         .login-container { background: var(--panel-bg); backdrop-filter: blur(15px); padding: 40px; border-radius: 10px; border: 1px solid var(--cyan); box-shadow: 0 0 30px rgba(0,229,255,0.2); width: 100%; max-width: 400px; text-align: center; }
         
-        /* LOGO EN LOGIN */
         .login-logo { width: 180px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(0,229,255,0.5)); }
 
         .login-container h1 { font-family: 'Orbitron', sans-serif; color: var(--cyan); margin-top: 0; margin-bottom: 20px; font-size: 1.5rem;}
@@ -141,6 +140,41 @@
         .toast.error { border-left-color: var(--red); border-color: rgba(218, 54, 51, 0.2); }
         .toast.success { border-left-color: var(--green); border-color: rgba(0, 230, 118, 0.2); }
 
+        /* --- MODAL DE CONFIRMACIÓN PERSONALIZADO --- */
+        .custom-modal-overlay {
+            display: none; position: fixed; inset: 0; z-index: 10000;
+            background: rgba(5, 8, 15, 0.85); backdrop-filter: blur(5px);
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .custom-modal-box {
+            background: var(--panel-bg); border: 1px solid var(--cyan);
+            border-radius: 10px; padding: 30px; width: 100%; max-width: 400px;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.2); text-align: center;
+            animation: zoomIn 0.3s ease;
+        }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .custom-modal-box h3 { font-family: 'Orbitron', sans-serif; color: var(--cyan); margin-bottom: 15px; font-size: 1.3rem; }
+        .custom-modal-box p { font-size: 1.1rem; color: #cbd5e1; margin-bottom: 25px; line-height: 1.4; }
+        
+        .custom-modal-actions { display: flex; gap: 15px; justify-content: center; }
+        
+        .btn-confirm { 
+            padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; 
+            font-weight: 700; font-size: 1rem; font-family: 'Rajdhani', sans-serif; 
+            text-transform: uppercase; transition: 0.3s;
+        }
+        .btn-confirm-cancel { 
+            background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); 
+        }
+        .btn-confirm-cancel:hover { background: rgba(255, 255, 255, 0.2); }
+        
+        .btn-confirm-accept { 
+            background: linear-gradient(90deg, var(--cyan), var(--magenta)); color: #fff; 
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+        }
+        .btn-confirm-accept:hover { box-shadow: 0 0 25px rgba(0, 229, 255, 0.6); transform: scale(1.05);}
+
         /* --- MEDIA QUERIES MÓVIL --- */
         @media (max-width: 768px) {
             .mobile-menu-btn { display: block; } 
@@ -209,7 +243,6 @@
                     <a class="nav-item" data-target="view-confirmados">
                         <span class="nav-icon">✅</span> <span class="nav-text">Equipos Confirmados</span>
                     </a>
-                    <!-- NUEVO BOTÓN: GESTIONAR LLAVES -->
                     <a class="nav-item" data-target="view-bracket">
                         <span class="nav-icon">🏆</span> <span class="nav-text">Gestionar Llaves</span>
                     </a>
@@ -223,7 +256,6 @@
             <!-- MAIN CONTENT -->
             <div class="main-content">
                 
-                <!-- VISTA 1: DASHBOARD -->
                 <div id="view-dashboard" class="content-section active">
                     <div class="panel-box">
                         <h2>Resumen General</h2>
@@ -242,7 +274,6 @@
                     </div>
                 </div>
 
-                <!-- VISTA 2: CONFIGURACIÓN -->
                 <div id="view-config" class="content-section">
                     <div class="panel-box">
                         <h2>Configuración</h2>
@@ -260,7 +291,6 @@
                     </div>
                 </div>
 
-                <!-- VISTA 3: MÉTODOS DE PAGO -->
                 <div id="view-pagos" class="content-section">
                     <div class="panel-box">
                         <h2>Métodos de Pago</h2>
@@ -292,7 +322,6 @@
                     </div>
                 </div>
 
-                <!-- VISTA 4: EQUIPOS PENDIENTES -->
                 <div id="view-pendientes" class="content-section">
                     <div class="panel-box">
                         <h2>Equipos Pendientes</h2>
@@ -310,7 +339,6 @@
                     </div>
                 </div>
 
-                <!-- VISTA 5: EQUIPOS CONFIRMADOS -->
                 <div id="view-confirmados" class="content-section">
                     <div class="panel-box">
                         <h2>Equipos Confirmados</h2>
@@ -328,7 +356,6 @@
                     </div>
                 </div>
 
-                <!-- VISTA 6: GESTIONAR LLAVES (NUEVO) -->
                 <div id="view-bracket" class="content-section">
                     <div class="panel-box">
                         <h2>Gestor de Llaves</h2>
@@ -354,6 +381,18 @@
         </div>
     </div>
 
+    <!-- MODAL DE CONFIRMACIÓN PERSONALIZADO (Reemplaza los alerts feos) -->
+    <div id="custom-confirm-modal" class="custom-modal-overlay">
+        <div class="custom-modal-box">
+            <h3 id="custom-modal-title">Confirmación</h3>
+            <p id="custom-modal-message">¿Estás seguro de realizar esta acción?</p>
+            <div class="custom-modal-actions">
+                <button id="custom-modal-cancel" class="btn-confirm btn-confirm-cancel">Cancelar</button>
+                <button id="custom-modal-accept" class="btn-confirm btn-confirm-accept">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = 'https://evlogrwanimynsodcdzu.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_ltDzkQz__8Nt1b68BSs-Sw_2ylQACi1';
@@ -362,6 +401,36 @@
 
         const loginSection = document.getElementById('login-section');
         const dashboard = document.getElementById('dashboard');
+
+        // --- FUNCIÓN DEL MODAL PERSONALIZADO ---
+        function customConfirm(message, title = 'Confirmación') {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('custom-confirm-modal');
+                document.getElementById('custom-modal-message').innerText = message;
+                document.getElementById('custom-modal-title').innerText = title;
+                
+                const btnAccept = document.getElementById('custom-modal-accept');
+                const btnCancel = document.getElementById('custom-modal-cancel');
+                
+                // Clonamos los botones para eliminar event listeners anteriores
+                const newAccept = btnAccept.cloneNode(true);
+                const newCancel = btnCancel.cloneNode(true);
+                btnAccept.parentNode.replaceChild(newAccept, btnAccept);
+                btnCancel.parentNode.replaceChild(newCancel, btnCancel);
+
+                modal.style.display = 'flex';
+
+                newAccept.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    resolve(true);
+                });
+
+                newCancel.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    resolve(false);
+                });
+            });
+        }
 
         // --- LÓGICA DEL MENÚ MÓVIL ---
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -544,7 +613,10 @@
         }
 
         window.aprobarEquipo = async function(id) {
-            if (!confirm('¿Aprobar este equipo?')) return;
+            // REEMPLAZADO CON CUSTOM CONFIRM
+            const confirmado = await customConfirm('¿Estás seguro de aprobar este equipo? Aparecerá en la web pública.', 'Aprobar Equipo');
+            if (!confirmado) return;
+            
             const { error } = await db.from('teams').update({ status: 'Confirmado' }).eq('id', id);
             if (!error) {
                 mostrarNotificacion('Equipo aprobado.', 'success');
@@ -555,7 +627,10 @@
         }
 
         window.eliminarEquipo = async function(id) {
-            if (!confirm('¿Estás seguro de que quieres eliminar este equipo permanentemente?')) return;
+            // REEMPLAZADO CON CUSTOM CONFIRM
+            const confirmado = await customConfirm('¿Estás seguro de eliminar este equipo permanentemente? Esta acción no se puede deshacer.', 'Eliminar Equipo');
+            if (!confirmado) return;
+            
             const { error } = await db.from('teams').delete().eq('id', id);
             if (error) { mostrarNotificacion('Error al eliminar: ' + error.message, 'error'); } 
             else {
@@ -568,12 +643,13 @@
 
         // --- LÓGICA PARA GENERAR EL BRACKET ALEATORIO ---
         document.getElementById('btn-generar-bracket').addEventListener('click', async () => {
-            if (!confirm('Esto borrará cualquier llave anterior y generará nuevos cruces aleatorios. ¿Continuar?')) return;
+            // REEMPLAZADO CON CUSTOM CONFIRM
+            const confirmado = await customConfirm('Esto borrará cualquier llave anterior y generará nuevos cruces aleatorios. ¿Deseas continuar?', 'Generar Sorteo');
+            if (!confirmado) return;
 
             const btn = document.getElementById('btn-generar-bracket');
             btn.textContent = 'Generando...';
 
-            // 1. Obtener equipos confirmados
             const { data: teams, error: fetchError } = await db.from('teams').select('id, team_name').eq('status', 'Confirmado');
 
             if (fetchError || !teams || teams.length < 2) {
@@ -582,10 +658,8 @@
                 return;
             }
 
-            // 2. Mezclar equipos aleatoriamente
             const shuffled = [...teams].sort(() => Math.random() - 0.5);
 
-            // 3. Crear los enfrentamientos
             const matchesToInsert = [];
             for (let i = 0; i < shuffled.length; i += 2) {
                 if (shuffled[i + 1]) {
@@ -599,8 +673,7 @@
                 }
             }
 
-            // 4. Limpiar llaves viejas y guardar las nuevas
-            await db.from('matches').delete().neq('id', 0); // Borra todo
+            await db.from('matches').delete().neq('id', 0);
             const { error: insertError } = await db.from('matches').insert(matchesToInsert);
 
             if (insertError) {
@@ -610,7 +683,6 @@
                 return;
             }
 
-            // 5. Mostrar vista previa
             mostrarNotificacion('¡Bracket generado con éxito!', 'success');
             mostrarVistaPrevia(matchesToInsert, shuffled);
             btn.textContent = 'Sortear y Generar Bracket';
